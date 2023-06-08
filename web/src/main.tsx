@@ -25,11 +25,11 @@ const router = createBrowserRouter([
     path: "/",
     element: <SignIn />,
   },
-  {
-    path: "/u",
-    element: <AllowedAccess />,
-    errorElement: <RouterError />,
-  },
+  // {
+  //   path: "/u",
+  //   element: <AllowedAccess />,
+  //   errorElement: <RouterError />,
+  // },
   {
     path: "/signup",
     element: <SignUp />,
@@ -40,21 +40,21 @@ const router = createBrowserRouter([
     element: <Registered/>,
     errorElement: <RouterError />,
   },
-  {
-    path: "/forgotpassword",
-    element: <ForgotPassword/>,
-    errorElement: <RouterError />,
-  },
-  {
-    path: "/changepassword",
-    element: <ChangePassword/>,
-    errorElement: <RouterError />,
-  },
-  {
-    path: "/changepasswordready",
-    element: <ChangePasswordReady/>,
-    errorElement: <RouterError />,
-  },
+  // {
+  //   path: "/forgotpassword",
+  //   element: <ForgotPassword/>,
+  //   errorElement: <RouterError />,
+  // },
+  // {
+  //   path: "/changepassword",
+  //   element: <ChangePassword/>,
+  //   errorElement: <RouterError />,
+  // },
+  // {
+  //   path: "/changepasswordready",
+  //   element: <ChangePasswordReady/>,
+  //   errorElement: <RouterError />,
+  // },
   
   
 ]);
