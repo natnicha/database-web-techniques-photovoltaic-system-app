@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CiUser, CiLock  } from "react-icons/ci";
+// import fetch from 'node-fetch';
 
     type ICreateUserData = {
         email: string;
@@ -26,6 +27,9 @@ export default function SignIn() {
         } = useForm<ICreateUserData>({resolver: yupResolver(schema)});
     
     const handleSubmit = (data: any) => {
+        var response = fetch('http://localhost:8000/auth/login', {method: 'POST', body: data});
+        console.log(data);
+        console.log(response);
         console.log(data);
         navigate("/u")
     }
@@ -37,7 +41,7 @@ export default function SignIn() {
     <div className="limiter">
 		<div className="container-login100">
 			<div className="wrap-login100 p-l-20 p-r-20 p-b-54">
-				<form className="login100-form validate-form">
+				<form className="login100-form validate-form" onSubmit={onSubmit(handleSubmit)}>
 					<span className="login100-form-title p-b-49">
 						Login
 					</span>
@@ -55,7 +59,7 @@ export default function SignIn() {
 						<span className="label-input100">Password</span>
                         <div className="input-icons">
                             <i className="icon"><CiLock/></i>
-                            <input className="input100" type="text" name="pass" placeholder="Type your password"/>
+                            <input className="input100" type="password" name="pass" placeholder="Type your password"/>
                             <span className="focus-input100"></span>
                         </div>
 					</div>

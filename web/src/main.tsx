@@ -15,6 +15,7 @@ import RouterError from './components/RouterError';
 import SignIn from './components/Forms/SignIn';
 import SignUp from './components/Forms/SignUp';
 import Registered from './components/Registered';
+import Map from './components/Forms/Map';
 import ForgotPassword from './components/Forms/ForgotPassword';
 import ChangePassword from './components/Forms/ChangePassword';
 import ChangePasswordReady from './components/ChangePasswordReady';
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
     element: <Registered/>,
     errorElement: <RouterError />,
   },
+  {
+    path: "/map",
+    element: <Map/>,
+    errorElement: <RouterError />,
+  },
   // {
   //   path: "/forgotpassword",
   //   element: <ForgotPassword/>,
@@ -60,9 +66,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <div className='App'>
-    <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-    <RouterProvider router={router} />
+    <React.StrictMode>
+    <div className='App'>
+      <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+      <RouterProvider router={router} />
+      </div>
     </div>
-    </div>
+    </React.StrictMode>
 )

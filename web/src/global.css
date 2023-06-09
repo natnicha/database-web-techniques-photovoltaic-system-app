@@ -30,7 +30,7 @@ body {
 
 .App {
    display: flex;
-     min-height: 100vh;
+    min-height: 100vh;
     align-items: center;
     justify-content: center;
     background-image: url("./assets/bg-01.jpg");
@@ -50,7 +50,23 @@ body {
     color: #6f6b6b;
 }
   
+body {
+  margin: 0;
+  padding: 0;
+}
 
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+.markercluster-map {
+  height: 90vh;
+}
+.leaflet-default-icon-path {
+  background-image: url(https://unpkg.com/leaflet@1.9.1/dist/images/marker-icon.png);
+}
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 

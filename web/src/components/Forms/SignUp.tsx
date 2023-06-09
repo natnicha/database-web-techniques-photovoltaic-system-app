@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import regex from '../../utils/regex';
 import notRed from "../../assets/not-red.svg";
 import checkGreen from "../../assets/check-green.svg";
+// import fetch from 'node-fetch';
 
 type ICreateUserData = {
     name: string;
@@ -43,7 +44,6 @@ export default function SignUp() {
 
     const handleSubmit = (data: any) => {
         navigate("/registered")
-        console.log(data);
     }
     const onHandleSubmit = () => {
         
