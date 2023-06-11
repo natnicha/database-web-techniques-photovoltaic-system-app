@@ -56,7 +56,7 @@ export default await function SignIn() {
                 }
               }).then((data) => {
                 console.log(data['access_token']);
-                navigate("/u")
+                navigate("/projectlist")
               })
               .catch((error) => {
                 console.log('error: ' + error);

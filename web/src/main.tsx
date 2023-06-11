@@ -19,6 +19,7 @@ import Map from './components/Forms/Map';
 import ForgotPassword from './components/Forms/ForgotPassword';
 import ChangePassword from './components/Forms/ChangePassword';
 import ChangePasswordReady from './components/ChangePasswordReady';
+import ProjectList from './components/Forms/ProjectList';
 
 
 const router = createBrowserRouter([
@@ -26,11 +27,11 @@ const router = createBrowserRouter([
     path: "/",
     element: <SignIn />,
   },
-  {
-    path: "/u",
-    element: <AllowedAccess />,
-    errorElement: <RouterError />,
-  },
+  // {
+  //   path: "/u",
+  //   element: <AllowedAccess />,
+  //   errorElement: <RouterError />,
+  // },
   {
     path: "/signup",
     element: <SignUp />,
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
   {
     path: "/map",
     element: <Map/>,
+    errorElement: <RouterError />,
+  },
+  {
+    path: "/projectlist",
+    element: <ProjectList/>,
     errorElement: <RouterError />,
   },
   // {
