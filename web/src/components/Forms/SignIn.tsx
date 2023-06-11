@@ -45,7 +45,6 @@ export default await function SignIn() {
         
     
     const handleSubmit = (data: any) => {
-        console.log(data);
         fetch('http://localhost:8000/auth/login', {
             method: 'POST', 
             headers: {'Content-Type':'application/json'},
@@ -57,11 +56,11 @@ export default await function SignIn() {
                 }
               }).then((data) => {
                 console.log(data['access_token']);
+                navigate("/u")
               })
               .catch((error) => {
                 console.log('error: ' + error);
               });
-        navigate("/u")
     }
     const onHandleSubmit = () => {
        console.log("Click")

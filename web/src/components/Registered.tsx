@@ -1,8 +1,8 @@
 import { useRouteError, useNavigate } from "react-router-dom";
 
 export default function Registered() {
-  const error: any = useRouteError();
-  console.error(error);
+  // const error: any = useRouteError();
+  // console.error(error);
 
   const navigate = useNavigate()
   const onHandleSubmit = () => {

@@ -8,16 +8,20 @@ import checkGreen from "../../assets/check-green.svg";
 // import fetch from 'node-fetch';
 
 type ICreateUserData = {
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
     password: string;
     confirmPassword: string;
 }
 
 const schema = yup.object({
-    name: yup.string()
-        .required("Full name field is required.")
-        .min(3, "The name field must contain at least 3 characters."),
+    first_name: yup.string()
+        .required("First name field is required.")
+        .min(3, "The first name field must contain at least 3 characters."),
+    last_name: yup.string()
+        .required("Last name field is required.")
+        .min(3, "The last name field must contain at least 3 characters."),
     email: yup.string()
         .required("Email field is required.")
         .email("Please enter a valid e-mail."),
@@ -43,11 +47,22 @@ export default function SignUp() {
         } = useForm<ICreateUserData>({resolver: yupResolver(schema)});
 
     const handleSubmit = (data: any) => {
-        console.log(data)
-        navigate("/registered")
+        console.log(data);
+        fetch('http://localhost:8000/auth/register', {
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(data)})
+            .then((response) => {
+                console.log(response)
+                if (response.ok) {
+                    navigate("/registered")
+                }
+              })
+              .catch((error) => {
+                console.log('error: ' + error);
+              });
     }
     const onHandleSubmit = () => {
-        
         console.log("Click")
     }
 
@@ -62,15 +77,28 @@ export default function SignUp() {
                     Register
                 </span>
                 <div className="wrap-input100 validate-input m-b-23">
-                    <span className="label-input100">Full Name</span>
+                    <span className="label-input100">First Name</span>
                     <input 
-                        {...register("name")}
+                        {...register("first_name")}
                         type="text"
-                        placeholder="Full Name"
-                        className={ errors.name ? "input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1"}
+                        placeholder="First Name"
+                        className={ errors.first_name ? "input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1"}
                     />
                     <span className="place-self-start text-[14px] text-[#C93B32]">
-                        {errors.name?.message}
+                        {errors.first_name?.message}
+                    </span>
+                </div>
+
+                <div className="wrap-input100 validate-input m-b-23">
+                    <span className="label-input100">Last Name</span>
+                    <input 
+                        {...register("last_name")}
+                        type="text"
+                        placeholder="Last Name"
+                        className={ errors.last_name ? "input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1"}
+                    />
+                    <span className="place-self-start text-[14px] text-[#C93B32]">
+                        {errors.last_name?.message}
                     </span>
                 </div>
 
