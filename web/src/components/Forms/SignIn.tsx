@@ -4,6 +4,22 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CiUser, CiLock  } from "react-icons/ci";
 // import fetch from 'node-fetch';
+const url:string = 'https://jokes-by-api-ninjas.p.rapidapi.com/v1/jokes';
+interface IAPIOptions {
+	method: string,
+	headers: {
+		"X-RapidAPI-Key": string,
+		"X-RapidAPI-Host": string
+	}
+}
+const options: IAPIOptions = {
+	method: 'GET',
+	headers: {
+	  'X-RapidAPI-Key': 'your-rapid-key',
+	  'X-RapidAPI-Host': 'jokes-by-api-ninjas.p.rapidapi.com'
+	}
+  };
+
 
     type ICreateUserData = {
         email: string;
@@ -11,63 +27,88 @@ import { CiUser, CiLock  } from "react-icons/ci";
     }
     
     const schema = yup.object({
-        email: yup.string().required("Email field is required.").email("Please enter a valid e-mail."),
-        password: yup.string().required("Password field is required.")
+        email: yup.string()
+            .required("Email field is required.")
+            .email("Please enter a valid e-mail."),
+        password: yup.string()
+            .required("Password field is required.")
     })
     
-export default function SignIn() {
+export default await function SignIn() {
 
     const navigate = useNavigate()
     
     const { register, 
         handleSubmit : onSubmit,
-        setError,
-        watch,
         formState: { errors }
         } = useForm<ICreateUserData>({resolver: yupResolver(schema)});
+        
     
     const handleSubmit = (data: any) => {
-        var response = fetch('http://localhost:8000/auth/login', {method: 'POST', body: data});
         console.log(data);
-        console.log(response);
-        console.log(data);
+        fetch('http://localhost:8000/auth/login', {
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(data)})
+            .then((response) => {
+                console.log(response)
+                if (response.ok) {
+                    return response.json()
+                }
+              }).then((data) => {
+                console.log(data['access_token']);
+              })
+              .catch((error) => {
+                console.log('error: ' + error);
+              });
         navigate("/u")
     }
     const onHandleSubmit = () => {
        console.log("Click")
     }
         
+    const name = register("email")
     return (
     <div className="limiter">
 		<div className="container-login100">
 			<div className="wrap-login100 p-l-20 p-r-20 p-b-54">
-				<form className="login100-form validate-form" onSubmit={onSubmit(handleSubmit)}>
+				<form onSubmit={onSubmit(handleSubmit)} className="login100-form validate-form" >
 					<span className="login100-form-title p-b-49">
 						Login
 					</span>
 
-					<div className="wrap-input100 validate-input m-b-23" data-validate = "Username is required">
-						<span className="label-input100">Username</span>
+					<div className="wrap-input100 validate-input m-b-23">
+						<span className="label-input100">Email</span>
                         <div className="input-icons">
                             <i className="icon"><CiUser/></i>
-                            <input className="input100" type="text" name="username" placeholder="Type your username"/>
+                            <input {...register("email")} 
+                            className={ errors.email ? "input100 block peer rounded-[5px] w-[25rem]  mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] border-[#AEBBCD] w-[25rem] mt-5 focus:outline-none focus:ring-1"}
+                            type="text" name="email" placeholder="Type your email"/>
                             <span className="focus-input100"></span>
+                            <span className="place-self-start text-[14px] text-[#C93B32]">
+                                {errors.email?.message}
+                            </span>
                         </div>
 					</div>
 
-					<div className="wrap-input100 validate-input" data-validate="Password is required">
+					<div className="wrap-input100 validate-input">
 						<span className="label-input100">Password</span>
                         <div className="input-icons">
                             <i className="icon"><CiLock/></i>
-                            <input className="input100" type="password" name="pass" placeholder="Type your password"/>
+                            <input  {...register("password")} 
+                            className={ errors.password ? "input100 block peer rounded-[5px] w-[25rem]  mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] border-[#AEBBCD] w-[25rem] mt-5 focus:outline-none focus:ring-1"}
+                             type="password" name="password" placeholder="Type your password"/>
                             <span className="focus-input100"></span>
+                            <span className="place-self-start text-[14px] text-[#C93B32]">
+                                {errors.password?.message}
+                            </span>
                         </div>
 					</div>
 					
 					<div className="container-login100-form-btn p-t-20">
 						<div className="wrap-login100-form-btn">
 							<div className="login100-form-bgbtn"></div>
-							<button className="login100-form-btn">
+							<button className="login100-form-btn" type="submit" onClick={onHandleSubmit}>
 								Login
 							</button>
 						</div>

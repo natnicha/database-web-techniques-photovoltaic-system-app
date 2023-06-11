@@ -43,6 +43,7 @@ export default function SignUp() {
         } = useForm<ICreateUserData>({resolver: yupResolver(schema)});
 
     const handleSubmit = (data: any) => {
+        console.log(data)
         navigate("/registered")
     }
     const onHandleSubmit = () => {
@@ -50,12 +51,12 @@ export default function SignUp() {
         console.log("Click")
     }
 
-    const name = register("name")
+    // const name = register("name")
     
     return (
         <div className="flex flex-col items-center">
 
-            <form onSubmit={onSubmit(handleSubmit)} className="flex flex-col items-center outline-none">
+            <form onSubmit={onSubmit(handleSubmit)} className="login100-form validate-form">
                 
                 <span className="login100-form-title p-b-49">
                     Register
