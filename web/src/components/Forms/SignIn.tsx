@@ -50,12 +50,10 @@ export default await function SignIn() {
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(data)})
             .then((response) => {
-                console.log(response)
                 if (response.ok) {
                     return response.json()
                 }
               }).then((data) => {
-                console.log(data['access_token']);
                 navigate("/projectlist",{state:{access_token:data['access_token']}})
               })
               .catch((error) => {
@@ -63,7 +61,6 @@ export default await function SignIn() {
               });
     }
     const onHandleSubmit = () => {
-       console.log("Click")
     }
         
     const name = register("email")
