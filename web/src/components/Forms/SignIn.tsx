@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CiUser, CiLock  } from "react-icons/ci";
-// import fetch from 'node-fetch';
+
 const url:string = 'https://jokes-by-api-ninjas.p.rapidapi.com/v1/jokes';
 interface IAPIOptions {
 	method: string,
@@ -56,7 +56,7 @@ export default await function SignIn() {
                 }
               }).then((data) => {
                 console.log(data['access_token']);
-                navigate("/projectlist")
+                navigate("/projectlist",{state:{access_token:data['access_token']}})
               })
               .catch((error) => {
                 console.log('error: ' + error);

@@ -16,10 +16,13 @@ import SignIn from './components/Forms/SignIn';
 import SignUp from './components/Forms/SignUp';
 import Registered from './components/Registered';
 import Map from './components/Forms/Map';
+import Profile from './components/Forms/Profile';
 import ForgotPassword from './components/Forms/ForgotPassword';
 import ChangePassword from './components/Forms/ChangePassword';
 import ChangePasswordReady from './components/ChangePasswordReady';
 import ProjectList from './components/Forms/ProjectList';
+import NewProject from './components/Forms/NewProject';
+import NewProduct from './components/Forms/NewProduct';
 
 
 const router = createBrowserRouter([
@@ -52,16 +55,21 @@ const router = createBrowserRouter([
     element: <ProjectList/>,
     errorElement: <RouterError />,
   },
-  // {
-  //   path: "/forgotpassword",
-  //   element: <ForgotPassword/>,
-  //   errorElement: <RouterError />,
-  // },
-  // {
-  //   path: "/changepassword",
-  //   element: <ChangePassword/>,
-  //   errorElement: <RouterError />,
-  // },
+  {
+    path: "/profile",
+    element: <Profile/>,
+    errorElement: <RouterError />,
+  },
+  {
+    path: "/newproject",
+    element: <NewProject/>,
+    errorElement: <RouterError />,
+  },
+  {
+    path: "/newproduct",
+    element: <NewProduct/>,
+    errorElement: <RouterError />,
+  },
   // {
   //   path: "/changepasswordready",
   //   element: <ChangePasswordReady/>,

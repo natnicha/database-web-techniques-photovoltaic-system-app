@@ -221,7 +221,18 @@ iframe {
 .bg3 {background-color: #ea4335}
 
 
+.box {
+  background-color: none;
+  color: black;
+  padding: 5px;
+  padding-right: 5px;
+  font-size: 13px;
+  border:#adadad 1px groove;
+}
 
+tr:hover {
+  background-color: #1da1f2;
+}
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/
 .limiter {
