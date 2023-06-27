@@ -133,8 +133,8 @@ export default function Map() {
               <MapContainer
                   className="markercluster-map"
                   bounds={latLngBounds([mapSetting.south, mapSetting.west],[mapSetting.north, mapSetting.east])}
-                  zoom={6}
-                  maxZoom={7}
+                  zoom={3}
+                  maxZoom={6}
                   >
                   <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
