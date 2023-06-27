@@ -29,7 +29,6 @@ const ProjectList = () => {
       headers: {'Authorization': "bearer "+location.state.access_token},
       })
       .then((response) => {
-          console.log(response)
           if (response.ok) {
               return response.json()
           }
@@ -50,7 +49,6 @@ const ProjectList = () => {
             ) ,
             'is_printed': String(element.is_printed) === "true"? "Printed" : "Open" }));
           setData(result)
-          console.log(result);
         })
         .catch((error) => {
           console.log('error: ' + error);
@@ -68,14 +66,13 @@ const ProjectList = () => {
   
   const handleRowClick = (id: number) => {
     let targetProject
-    console.log(id)
     for (const sharedField of data) {
       if (id == sharedField.id) {
         targetProject = sharedField
         break;
       }
     }
-    navigate("/map",{state:{access_token:data['access_token'], data:targetProject, project_id:id}})
+    navigate("/map",{state:{access_token:location.state.access_token, data:[targetProject], project_id:id}})
   };
   
   return (
