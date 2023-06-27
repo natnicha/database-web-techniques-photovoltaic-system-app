@@ -62,7 +62,7 @@ body {
   width: 100%;
 }
 .markercluster-map {
-  height: 90vh;
+  height: 70vh;
 }
 .leaflet-default-icon-path {
   background-image: url(https://unpkg.com/leaflet@1.9.1/dist/images/marker-icon.png);
@@ -230,6 +230,16 @@ iframe {
   border:#adadad 1px groove;
 }
 
+.box-number {
+  background-color: none;
+  color: black;
+  padding: 5px;
+  padding-right: 5px;
+  font-size: 13px;
+  text-align: right;
+  border:#adadad 1px groove;
+}
+
 tr:hover {
   background-color: #1da1f2;
 }
@@ -251,7 +261,23 @@ tr:hover {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.container-projectlist {
+  width: 100%;  
+  min-height: 50vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 55px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -262,8 +288,16 @@ tr:hover {
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
+  padding: 55px;
 }
 
+.wrap-projectlist {
+  width: 1000px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 55px;
+}
 
 /*------------------------------------------------------------------
 [ Form ]*/

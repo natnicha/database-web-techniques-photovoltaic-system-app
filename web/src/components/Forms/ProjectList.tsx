@@ -76,7 +76,7 @@ const ProjectList = () => {
   };
   
   return (
-    <div>
+    <div className='wrap-login100'>
       <form>
         <div>
           <label htmlFor="searchQuery">Search:</label>

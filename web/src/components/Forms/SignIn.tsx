@@ -65,7 +65,7 @@ export default await function SignIn() {
         
     const name = register("email")
     return (
-    <div className="limiter">
+    <div className="wrap-login100">
 		<div className="container-login100">
 			<div className="wrap-login100 p-l-20 p-r-20 p-b-54">
 				<form onSubmit={onSubmit(handleSubmit)} className="login100-form validate-form" >

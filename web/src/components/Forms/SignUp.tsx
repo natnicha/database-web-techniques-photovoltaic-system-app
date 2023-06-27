@@ -69,7 +69,7 @@ export default function SignUp() {
     // const name = register("name")
     
     return (
-        <div className="flex flex-col items-center">
+        <div className="wrap-login100 container-login100 flex flex-col items-center">
 
             <form onSubmit={onSubmit(handleSubmit)} className="login100-form validate-form">
                 
