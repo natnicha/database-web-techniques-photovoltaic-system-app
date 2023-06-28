@@ -29,30 +29,33 @@ const ProjectList = () => {
       headers: {'Authorization': "bearer "+location.state.access_token},
       })
       .then((response) => {
-          if (response.ok) {
-              return response.json()
-          }
-        }).then((data) => {
-          const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
-            { 'id': element.id, 
-            'user_id': element.user_id,
-            'name': element.name,
-            'description': element.description,
-            'start_at': new Date(element.start_at).toLocaleString(
-              "en-US",
-                {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
+        if (response.ok) {
+            return response.json()
+        }
+      }).then((data) => {
+        const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
+          { 'id': element.id, 
+          'user_id': element.user_id,
+          'name': element.name,
+          'description': element.description,
+          'start_at': new Date(element.start_at).toLocaleString(
+            "en-US",
+              {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric" 
 
-                }
-            ) ,
-            'is_printed': String(element.is_printed) === "true"? "Printed" : "Open" }));
-          setData(result)
-        })
-        .catch((error) => {
-          console.log('error: ' + error);
-        });
+              }
+          ) ,
+          'is_printed': String(element.is_printed) === "true"? "Printed" : "Open" }));
+        setData(result)
+      })
+      .catch((error) => {
+        console.log('error: ' + error);
+      });
   }, [searchQuery, status]);
   
 
@@ -60,6 +63,10 @@ const ProjectList = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleCreateProject = () => {
+    navigate("/newproject",{state:{access_token:location.state.access_token}})
+  };
+  
   const handleStatusChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setStatus(event.target.value);
   };
@@ -97,14 +104,22 @@ const ProjectList = () => {
             <option value="true">Printed</option>
           </select>
         </div>
-
+        <div>
+        <button 
+            type="submit"
+            className={`rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5`}
+            onClick={handleCreateProject}
+            >
+            New Project
+          </button>
+        </div>
       {data.length > 0 && (
         <table className="wrapper" >
           <ul>
             <tr> 
                 <th className="box a">Name</th>
                 <th className="box b">Description</th>
-                <th className="box c">Date</th>
+                <th className="box c">Date<br/>(local time)</th>
                 <th className="box d">Status</th>
             </tr>
             {data.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; }) =>

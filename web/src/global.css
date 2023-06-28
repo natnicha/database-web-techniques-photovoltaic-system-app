@@ -299,6 +299,32 @@ tr:hover {
   padding: 55px;
 }
 
+.wrap-newproject {
+  width: 1050px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 55px;
+}
+
+.table {
+  width: 1500px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 55px;
+}
+
+.my-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.my-button:enabled {
+  opacity: 1;
+  cursor: auto
+}
+
 /*------------------------------------------------------------------
 [ Form ]*/
 
@@ -314,8 +340,6 @@ tr:hover {
   line-height: 1.2;
   text-align: center;
 }
-
-
 
 /*------------------------------------------------------------------
 [ Input ]*/

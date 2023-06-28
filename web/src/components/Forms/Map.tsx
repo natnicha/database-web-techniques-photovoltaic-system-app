@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
 // import MarkerClusterGroup from "react-leaflet-markercluster";
 import React, { useEffect, useState } from 'react';
-import {useLocation}  from "react-router-dom";
+import {useLocation, useNavigate}  from "react-router-dom";
 import '../../global.css';
 import { bounds, latLngBounds, map } from "leaflet";
 
@@ -47,8 +47,8 @@ function findSolarPanelById(masterSolarPanel: any, targetId: number){
 
 export default function Map() {
   
+  const navigate = useNavigate()
   const location = useLocation();
-  // const [solarPanel, setSolarPanel] = useState([] as any);
   const [project, setProject] = useState([] as any);
   const [products, setProducts] = useState([] as any);
   const [mapSetting, setMapSetting] = useState({south:0.0, west:0.0, north:0.0, east:0.0});
@@ -107,6 +107,25 @@ export default function Map() {
         console.log('error: ' + error);
       });
   }, []);
+  
+  const handleDelete = () => {
+    fetch(`http://localhost:8000/api/v1/project/delete/`+location.state.data[0].id, {
+      method: 'DELETE', 
+      headers: {'Authorization': "bearer "+location.state.access_token},
+      })  
+      .then((response) => {
+        if (response.ok) {
+          navigate("/projectlist",{state:{access_token:location.state.access_token}})
+          console.log("delete successfully!")
+          return response.json()
+        }
+      }) 
+      .catch((error) => {
+        console.log('error: ' + error);
+      });
+
+
+  };
   
   return (
     <div className="wrap-projectlist">
@@ -198,6 +217,13 @@ export default function Map() {
               </MapContainer>
           </div>
       )}
+      
+      <div>
+        <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+        onClick={handleDelete}>
+          Delete Project
+          </button>
+      </div>
     </div>
   );
 }
