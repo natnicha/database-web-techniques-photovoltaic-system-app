@@ -136,7 +136,6 @@ const NewProject = () => {
       updatedRows[rowId] = { ...updatedRows[rowId], solarPanelId: Number(value) };
       return updatedRows; 
     });
-    console.log(productRows)
   };
 
   const handleSaveButton = (rowId: number)=> {

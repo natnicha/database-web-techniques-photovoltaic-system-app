@@ -91,6 +91,7 @@ export default function Map() {
           { 
             'id': element.id,
             'project_id': element.project_id,
+            'solar_panel_model_id': element.solar_panel_model_id,
             'solar_panel_model': findSolarPanelById(solarPanel, element.solar_panel_model_id).name,
             'description': findSolarPanelById(solarPanel, element.solar_panel_model_id).description,
             'efficiency': findSolarPanelById(solarPanel, element.solar_panel_model_id).efficiency,
@@ -130,7 +131,6 @@ export default function Map() {
       .catch((error) => {
         console.log('error: ' + error);
       });
-
 
   };
 
@@ -216,6 +216,7 @@ export default function Map() {
               { 
                 'id': element.id,
                 'project_id': element.project_id,
+                'solar_panel_model_id': element.solar_panel_model_id,
                 'solar_panel_model': findSolarPanelById(solarPanel, element.solar_panel_model_id).name,
                 'description': findSolarPanelById(solarPanel, element.solar_panel_model_id).description,
                 'efficiency': findSolarPanelById(solarPanel, element.solar_panel_model_id).efficiency,
@@ -240,14 +241,14 @@ export default function Map() {
   };
 
   const handleRowClick = (id: number) => {
-    let targetProject
+    let targetProduct
     for (const product of products) {
       if (id == product.id) {
-        targetProject = product
+        targetProduct = product
         break;
       }
     }
-    navigate("/editproduct",{state:{access_token:location.state.access_token, data:[targetProject], project_id:id, project:location.state.data}})
+    navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, product_id:id, project:location.state.data}})
   };
 
   return (

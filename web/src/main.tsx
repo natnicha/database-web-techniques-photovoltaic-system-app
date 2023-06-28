@@ -22,7 +22,7 @@ import ChangePassword from './components/Forms/ChangePassword';
 import ChangePasswordReady from './components/ChangePasswordReady';
 import ProjectList from './components/Forms/ProjectList';
 import NewProject from './components/Forms/NewProject';
-import EditProduct from './components/Forms/NewProduct';
+import EditProduct from './components/Forms/EditProduct';
 
 
 const router = createBrowserRouter([
