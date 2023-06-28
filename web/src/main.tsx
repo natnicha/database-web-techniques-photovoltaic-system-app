@@ -23,6 +23,7 @@ import ChangePasswordReady from './components/ChangePasswordReady';
 import ProjectList from './components/Forms/ProjectList';
 import NewProject from './components/Forms/NewProject';
 import EditProduct from './components/Forms/EditProduct';
+import NewProduct from './components/Forms/NewProduct';
 
 
 const router = createBrowserRouter([
@@ -68,6 +69,11 @@ const router = createBrowserRouter([
   {
     path: "/editproduct",
     element: <EditProduct/>,
+    errorElement: <RouterError />,
+  },
+  {
+    path: "/newproduct",
+    element: <NewProduct/>,
     errorElement: <RouterError />,
   },
   // {

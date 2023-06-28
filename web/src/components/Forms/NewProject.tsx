@@ -1,9 +1,10 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from 'moment-timezone';
 
 const NewProject = () => {
   const location = useLocation();
+  const navigate = useNavigate()
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [startAt, setStartAt] = useState('');
@@ -193,6 +194,10 @@ const NewProject = () => {
     }
   };
 
+  const handleBackLink = () => {
+    navigate("/projectlist", {state:{access_token:location.state.access_token}})
+  };
+
   return (
     <div className='wrap-newproject'>
     <form onSubmit={handleSubmit}>
@@ -211,11 +216,12 @@ const NewProject = () => {
 
       <div>
         <label htmlFor="projectDescription">Description:</label>
-        <textarea
+        <input
+          type="text"
           id="projectDescription"
           value={projectDescription}
           onChange={handleProjectDescriptionChange}
-        ></textarea>
+        ></input>
       </div>
 
       <div>
@@ -245,9 +251,7 @@ const NewProject = () => {
         </select>
       </div>
 
-      <button className='my-button' type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
-    
-    </form>
+      <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5' type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
     
     {isCreatedProject && (
     <div>
@@ -320,6 +324,12 @@ const NewProject = () => {
       <button onClick={handleAddRow}>Add Row</button>
     </div>
     )}
+        <div>
+          <label onClick={handleBackLink} className="txt2 mb-5">
+            Back
+          </label>
+        </div>
+      </form>
     </div>
   );
 };

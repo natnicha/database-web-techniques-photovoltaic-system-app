@@ -4,21 +4,16 @@ import {Link, useLocation, useNavigate}  from "react-router-dom";
 const editProduct = () => {
   const navigate = useNavigate()
   const location = useLocation();
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [area, setArea] = useState('');
-  const [orientation, setOrientation] = useState('');
-  const [inclination, setInclination] = useState('');
-  const [solarPanelId, setSolarPanelId] = useState('');
+  const [latitude, setLatitude] = useState("" as any);
+  const [longitude, setLongitude] = useState("" as any);
+  const [area, setArea] = useState("" as any);
+  const [orientation, setOrientation] = useState("" as any);
+  const [inclination, setInclination] = useState("" as any);
+  const [solarPanelId, setSolarPanelId] = useState("" as any);
   const [solarPanels, setSolarPanels] = useState([] as any);
 
   useEffect(() => {
-    setLatitude(location.state.product.geolocation.split(",")[0])
-    setLongitude(location.state.product.geolocation.split(",")[1])
-    setArea(location.state.product.area)
-    setOrientation(location.state.product.orientation)
-    setInclination(location.state.product.inclination)
-    setSolarPanelId(location.state.product.solar_panel_model_id)
+    setSolarPanelId(1)
     
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
@@ -38,27 +33,27 @@ const editProduct = () => {
 
   
   const handleLatitudeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setLatitude(event.target.value);
+    setLatitude(Number(event.target.value));
   };
-  
+
   const handleLongitudeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setLongitude(event.target.value);
+    setLongitude(Number(event.target.value));
   };
   
   const handleAreaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setArea(event.target.value);
+    setArea(Number(event.target.value));
   };
   
   const handleOrientationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setOrientation(event.target.value);
+    setOrientation(Number(event.target.value));
   };
   
   const handleInclinationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setInclination(event.target.value);
+    setInclination(Number(event.target.value));
   };
-
+  
   const handleSolarPanelChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setSolarPanelId(event.target.value)
+    setSolarPanelId(Number(event.target.value))
   };
 
   const handleSaveButton = (event: { preventDefault: () => void; }) => {
@@ -72,8 +67,8 @@ const editProduct = () => {
       'area': area,
       'geolocation': latitude+","+longitude,
     }
-    fetch(`http://localhost:8000/api/v1/product/update/`+location.state.product.id, {
-      method: 'PUT', 
+    fetch(`http://localhost:8000/api/v1/product/create`, {
+      method: 'POST', 
       headers: {'Authorization': "bearer "+location.state.access_token},
       body: JSON.stringify(data)
       })
@@ -89,23 +84,6 @@ const editProduct = () => {
       });
   };
 
-  const handleDeleteButton = (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    fetch(`http://localhost:8000/api/v1/product/delete/`+location.state.product.id, {
-      method: 'DELETE', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
-      })  
-      .then((response) => {
-        if (response.ok) {
-          handleBackLink()
-          return response.json()
-        }
-      }) 
-      .catch((error) => {
-        console.log('error: ' + error);
-      });
-  };
-
   const handleBackLink = () => {
     navigate("/map",{state:{access_token:location.state.access_token, data:location.state.project, project_id:location.state.project[0].id}})
   };
@@ -115,7 +93,7 @@ const editProduct = () => {
       <form>
         <div>
           <span className="login100-form-title p-b-49">
-            Update Product
+            New Product
           </span>
           <div>
           <label>Latitude:</label>
@@ -124,7 +102,6 @@ const editProduct = () => {
             value={latitude}
             onChange={handleLatitudeChange}
           />
-          
           </div>
           
           <div>
@@ -181,14 +158,9 @@ const editProduct = () => {
             onClick={(event) => handleSaveButton(event)}
           >Save
         </button>
-        <button
-            className={`rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 hover:bg-[#af0000] mb-5`}
-            onClick={(event) => handleDeleteButton(event)}
-          >Delete
-        </button>
-						<label onClick={handleBackLink} className="txt2">
-							Back
-						</label>
+        <label onClick={handleBackLink} className="txt2 mb-5">
+          Back
+        </label>
 				</div>
       </form>
     </div>

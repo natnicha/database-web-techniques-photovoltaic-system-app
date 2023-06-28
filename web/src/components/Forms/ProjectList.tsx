@@ -116,12 +116,10 @@ const ProjectList = () => {
       {data.length > 0 && (
         <table className="wrapper" >
           <ul>
-            <tr> 
-                <th className="box a">Name</th>
-                <th className="box b">Description</th>
-                <th className="box c">Date<br/>(local time)</th>
-                <th className="box d">Status</th>
-            </tr>
+            <th className="box a">Name</th>
+            <th className="box b">Description</th>
+            <th className="box c">Date<br/>(local time)</th>
+            <th className="box d">Status</th>
             {data.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; }) =>
               <tr key={item.id}  onClick={() => handleRowClick(item.id)}> 
                 <td className="box a">{item.name}</td>

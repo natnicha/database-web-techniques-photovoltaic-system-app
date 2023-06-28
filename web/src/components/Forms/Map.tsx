@@ -134,7 +134,11 @@ export default function Map() {
 
   };
 
-  const handleSubmit =  (event: { preventDefault: () => void;}) => {
+  const handleBackLink = () => {
+    navigate("/projectlist", {state:{access_token:location.state.access_token}})
+  };
+
+  const handleExportReport =  (event: { preventDefault: () => void;}) => {
     event.preventDefault();
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
@@ -240,6 +244,11 @@ export default function Map() {
         });
   };
 
+  const handleAddNewProduct =  (event: { preventDefault: () => void;}) => {
+    event.preventDefault();
+    navigate("/newproduct",{state:{access_token:location.state.access_token, project:location.state.data}})
+  };
+
   const handleRowClick = (id: number) => {
     let targetProduct
     for (const product of products) {
@@ -248,7 +257,7 @@ export default function Map() {
         break;
       }
     }
-    navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, product_id:id, project:location.state.data}})
+    navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, project:location.state.data}})
   };
 
   return (
@@ -258,13 +267,11 @@ export default function Map() {
           {project.length > 0 && (
             <table className="wrapper 1" >
               <ul>
-                <tr> 
-                    <th className="box a">Name</th>
-                    <th className="box b">Description</th>
-                    <th className="box c">Date</th>
-                    <th className="box d">Status</th>
-                    <th className="box d">Total Generated Energy (kWh)</th>
-                </tr>
+                <th className="box a">Name</th>
+                <th className="box b">Description</th>
+                <th className="box c">Date</th>
+                <th className="box d">Status</th>
+                <th className="box d">Total Generated Energy (kWh)</th>
                 {project.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; generated_energy:number}) =>
                   <tr key={item.id} > 
                     <td className="box a">{item.name}</td>
@@ -280,7 +287,7 @@ export default function Map() {
         </div>
         <div>
           <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
-          onClick={handleSubmit}>
+          onClick={(event) => handleExportReport(event)}>
             Export Report
             </button>
         </div>
@@ -288,16 +295,14 @@ export default function Map() {
           {products.length > 0 && (
             <table className="wrapper 2" >
               <ul>
-                <tr> 
-                    <th className="box a">Name</th>
-                    <th className="box a">Description</th>
-                    <th className="box a">Efficiency (%)</th>
-                    <th className="box a">Orientation (°)</th>
-                    <th className="box b">Inclination (°)</th>
-                    <th className="box c">Area (sq.m.)</th>
-                    <th className="box d">Location</th>
-                    <th className="box d">Generated Energy (kWh)</th>
-                </tr>
+                <th className="box a">Name</th>
+                <th className="box a">Description</th>
+                <th className="box a">Efficiency (%)</th>
+                <th className="box a">Orientation (°)</th>
+                <th className="box b">Inclination (°)</th>
+                <th className="box c">Area (sq.m.)</th>
+                <th className="box d">Location</th>
+                <th className="box d">Generated Energy (kWh)</th>
                 {products.map((item: { id: number; solar_panel_model: string, description: string, efficiency: number, orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number}) =>
                   <tr key={item.id} onClick={() => handleRowClick(item.id)} > 
                     <td className="box a">{item.solar_panel_model}</td>
@@ -313,6 +318,12 @@ export default function Map() {
               </ul>
             </table>
           )}
+        </div>
+        <div>
+        <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+          onClick={(event) => handleAddNewProduct(event)}>
+            Add new product
+            </button>
         </div>
         {mapSetting.south != 0 && (
             <div className="map">
@@ -352,10 +363,15 @@ export default function Map() {
         )}
         
         <div>
-          <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+          <button className="rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 
           onClick={handleDelete}>
             Delete Project
             </button>
+        </div>
+        <div>
+        <label onClick={handleBackLink} className="txt2 mb-5">
+          Back
+        </label>
         </div>
       </form>
     </div>
