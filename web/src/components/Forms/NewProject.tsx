@@ -113,7 +113,6 @@ const NewProject = () => {
       id:productRows.length, no:productRows.length+1, solarPanelId: 1, latitude:0, longitude:0, area:0, orientation:0, inclination:0, productId:0
     };
     setProductRows((prevRows: any) => [...prevRows, newProductRow]);
-    console.log(productRows)
   };
 
 
@@ -127,8 +126,6 @@ const NewProject = () => {
       updatedRows[rowId] = { ...updatedRows[rowId], [columnName]: Number(value) };
       return updatedRows;
     });
-
-    console.log(productRows)
   };
   
   const handleSolarPanelChange = (event: { target: { value: React.SetStateAction<string>; }; }, rowId:number) => {
