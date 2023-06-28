@@ -1,9 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
-// import MarkerClusterGroup from "react-leaflet-markercluster";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {useLocation, useNavigate}  from "react-router-dom";
 import '../../global.css';
-import { bounds, latLngBounds, map } from "leaflet";
+import { latLngBounds } from "leaflet";
 
 function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
   const keyValuePairs = [];
@@ -54,7 +53,6 @@ export default function Map() {
   const [products, setProducts] = useState([] as any);
   const [mapSetting, setMapSetting] = useState({south:0.0, west:0.0, north:0.0, east:0.0});
   let solarPanel = {}
-  const [editableRowId, setEditableRowId] = useState(-1);
 
   useEffect(() => {
     setProject(location.state.data)

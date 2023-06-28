@@ -38,7 +38,6 @@ const NewProject = () => {
     setSelectedTimezoneOffset(offset);
     
     setSelectedTimezones(timeZone+","+offset);
-    // setIsCreatedProject(true)
 
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 

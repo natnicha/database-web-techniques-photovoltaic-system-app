@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import regex from '../../utils/regex';
 import notRed from "../../assets/not-red.svg";
 import checkGreen from "../../assets/check-green.svg";
-// import fetch from 'node-fetch';
 
 type ICreateUserData = {
     first_name: string;
@@ -66,8 +65,6 @@ export default function SignUp() {
         console.log("Click")
     }
 
-    // const name = register("name")
-    
     return (
         <div className="wrap-login100 container-login100 flex flex-col items-center">
 
