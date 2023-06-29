@@ -39,6 +39,13 @@ body {
     background-repeat: 'no-repeat';
   }
 
+.header {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  vertical-align:middle;
+  justify-content: center;
+}
 
 .input-icons i {
     position: absolute;

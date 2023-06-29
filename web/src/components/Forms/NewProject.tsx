@@ -21,7 +21,8 @@ const NewProject = () => {
   useEffect(() => {
     let jwt = Cookies.get('jwt')?.toString()
     if ( typeof(jwt) == 'undefined' && jwt == null){
-      throw Error("error: No access token. Please login first.");
+      navigate("/")
+      return
     }
     setJwt(String(jwt))
 

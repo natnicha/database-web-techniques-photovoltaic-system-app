@@ -22,7 +22,8 @@ const ProjectList = () => {
   useEffect(() => {
     let jwt = Cookies.get('jwt')?.toString()
     if ( typeof(jwt) == 'undefined' && jwt == null){
-      throw Error("error: No access token. Please login first.");
+      navigate("/")
+      return
     }
     setJwt(String(jwt))
 
@@ -90,7 +91,16 @@ const ProjectList = () => {
     navigate("/editproject",{state:{data:[targetProject], project_id:id}})
     return
   };
-  
+
+  useEffect(() => {
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      navigate("/")
+      return
+    }
+    setJwt(String(jwt))
+  },[])
+
   const handleProfile = () => {
     navigate("/profile")
     return
@@ -119,6 +129,13 @@ const ProjectList = () => {
   };
 
   return (
+  <div>
+    <h1 className='header'>
+      <img src="../src/assets/profile.png" width={50} onClick={handleProfile}></img>
+      <label className="header txt2 p-t-30 p-l-20 mb-5" onClick={handleLogoutLink}>
+        Log Out
+      </label>
+    </h1>
     <div className='wrap-login100'>
       <form>
         <div>
@@ -172,13 +189,8 @@ const ProjectList = () => {
         </table>
       )}
       </form>
-      <div>
-        <img src="../src/assets/profile.png" width={150} onClick={handleProfile}></img>
-        <label onClick={handleLogoutLink} className="txt2 mb-5">
-          Log Out
-        </label>
-      </div>
     </div>
+  </div>
   );
 };
 
