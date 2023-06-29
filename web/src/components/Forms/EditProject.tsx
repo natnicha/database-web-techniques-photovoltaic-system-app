@@ -80,11 +80,13 @@ export default function EditProject() {
       headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
-        if (response.ok) {
-            return response.json()
-        }
+        return response.json()
       }).then((data) => {
-        solarPanel = data.data
+        if (data != null) {
+          solarPanel = data.data
+        } else {
+          setFeedback(data["error"])
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -128,6 +130,8 @@ export default function EditProject() {
           setStartAt(result[0].start_at)
           setStatus(result[0].is_printed)
           setIsPrinted(data.data[0].is_printed)
+        } else {
+          setFeedback(data["error"])
         }
       })
       .catch((error) => {
@@ -143,29 +147,33 @@ export default function EditProject() {
             return response.json()
         }
       }).then((data) => {
-        const result = data.data.map((element: { id: number; project_id: number; solar_panel_model_id: number; orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number }) => (
-          { 
-            'id': element.id,
-            'project_id': element.project_id,
-            'solar_panel_model_id': element.solar_panel_model_id,
-            'solar_panel_model': findSolarPanelById(solarPanel, element.solar_panel_model_id).name,
-            'description': findSolarPanelById(solarPanel, element.solar_panel_model_id).description,
-            'efficiency': findSolarPanelById(solarPanel, element.solar_panel_model_id).efficiency,
-            'orientation': element.orientation,
-            'inclination': element.inclination,
-            'area': element.area,
-            'geolocation': element.geolocation.substring(1, element.geolocation.length-1),
-            'generated_energy': element.generated_energy,
-        }));
-        let location = calculateBound(result)
-        setMapSetting(location)
-        setProducts(result)
-        
-        var total = 0
-        for (const solarPanel of result) {
-          total += solarPanel.generated_energy
+        if (data != null){
+          const result = data.data.map((element: { id: number; project_id: number; solar_panel_model_id: number; orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number }) => (
+            { 
+              'id': element.id,
+              'project_id': element.project_id,
+              'solar_panel_model_id': element.solar_panel_model_id,
+              'solar_panel_model': findSolarPanelById(solarPanel, element.solar_panel_model_id).name,
+              'description': findSolarPanelById(solarPanel, element.solar_panel_model_id).description,
+              'efficiency': findSolarPanelById(solarPanel, element.solar_panel_model_id).efficiency,
+              'orientation': element.orientation,
+              'inclination': element.inclination,
+              'area': element.area,
+              'geolocation': element.geolocation.substring(1, element.geolocation.length-1),
+              'generated_energy': element.generated_energy,
+          }));
+          let location = calculateBound(result)
+          setMapSetting(location)
+          setProducts(result)
+          
+          var total = 0
+          for (const solarPanel of result) {
+            total += solarPanel.generated_energy
+          }
+          setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
+        } else {
+          setFeedback(data["error"])
         }
-        setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
       })  
       .catch((error) => {
         console.log('error: ' + error);

@@ -39,6 +39,11 @@ const ProjectList = () => {
       .then((response) => {
         if (response.ok) {
             return response.json()
+        } 
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }).then((data) => {
         const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
