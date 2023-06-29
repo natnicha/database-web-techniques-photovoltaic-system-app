@@ -10,9 +10,9 @@ const NewProject = () => {
   const [startAt, setStartAt] = useState('');
   const [time, setTime] = useState('');
   const [timezones, setTimezones] = useState([] as any);
-  const [selectedTimezones, setSelectedTimezones] = useState([] as any);
+  const [selectedTimezones, setSelectedTimezones] = useState('' as any);
   
-  const [selectedTimezoneOffset, setSelectedTimezoneOffset] = useState("");
+  const [selectedTimezoneOffset, setSelectedTimezoneOffset] = useState('');
   const [isCreatedProject, setIsCreatedProject] = useState(false);
   const [productId, setProductId] = useState(0);
   const [solarPanels, setSolarPanels] = useState([] as any);
@@ -75,7 +75,7 @@ const NewProject = () => {
     let value = event.target.value.toString().split(",")
     let timezone = value[0]
     let offset = moment().tz(timezone).format('Z')
-    setSelectedTimezones(value);
+    setSelectedTimezones(event.target.value.toString());
     setSelectedTimezoneOffset(offset);
   };
 
@@ -200,59 +200,74 @@ const NewProject = () => {
 
   return (
     <div className='wrap-newproject'>
-    <form onSubmit={handleSubmit}>
       <span className="login100-form-title p-b-49">
         New Project
       </span>
-      <div>
-        <label htmlFor="projectName">Name:</label>
-        <input
-          type="text"
-          id="projectName"
-          value={projectName}
-          onChange={handleProjectNameChange}
-        />
-      </div>
+      <table>
+        <tbody>
+        <tr>
+          <td><label htmlFor="projectName">Name:</label></td>
+          <td>
+            <input
+              type="text"
+              id="projectName"
+              value={projectName}
+              onChange={handleProjectNameChange}
+            />
+          </td>
+        </tr>
 
-      <div>
-        <label htmlFor="projectDescription">Description:</label>
-        <input
-          type="text"
-          id="projectDescription"
-          value={projectDescription}
-          onChange={handleProjectDescriptionChange}
-        ></input>
-      </div>
+        <tr>
+          <td><label htmlFor="projectDescription">Description:</label></td>
+          <td>
+            <input
+              type="text"
+              id="projectDescription"
+              value={projectDescription}
+              onChange={handleProjectDescriptionChange}
+            ></input>
+          </td>
+        </tr>
 
-      <div>
-        <label htmlFor="startAt">Start At:</label>
-        <input
-          type="date"
-          id="startAt"
-          value={startAt}
-          onChange={handleStartAtChange}
-        />
-        <input
-          type="time"
-          id="time"
-          value={time}
-          onChange={handleTimeChange}
-        />
-        </div>
+        <tr>
+          <td><label htmlFor="startAt">Start At:</label></td>
+          <td>
+            <input
+              type="date"
+              id="startAt"
+              value={startAt}
+              onChange={handleStartAtChange}
+            />
+          </td>
 
-      <div>
-        <label>Select a timezone:</label>
-        <select value={selectedTimezones} onChange={handleTimezoneChange}>
-          {timezones.map((timezone: { name: string; offset: any; }, index: React.Key | null | undefined) => (
-            <option key={index} value={timezone.name+","+timezone.offset}  >
-              {`${timezone.name} (GMT${timezone.offset})`}
-            </option>
-          ))}
-        </select>
-      </div>
+          <td>
+            <input
+              type="time"
+              id="time"
+              value={time}
+              onChange={handleTimeChange}
+            />
+          </td>
+        </tr>
 
+        <tr>
+          <td>
+          </td>
+          <td>
+          <select value={selectedTimezones} onChange={handleTimezoneChange} multiple={false}>
+            {timezones.map((timezone: { name: string; offset: any; }, index: React.Key | null | undefined) => (
+              <option key={index} value={timezone.name+","+timezone.offset}  >
+                {`${timezone.name} (GMT${timezone.offset})`}
+              </option>
+            ))}
+          </select>
+          </td>
+        </tr>
+        </tbody>
+      </table>
       <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5' type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
     
+  <form onSubmit={handleSubmit}>
     {isCreatedProject && (
     <div>
       <span className="p-b-49">
@@ -288,8 +303,8 @@ const NewProject = () => {
               /></td>
               <td> {/* value={row.solarPanelId} */}
                 <select  onChange={(event) => handleSolarPanelChange(event, row.id)}>
-                  {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }, index: React.Key) => (
-                    <option key={index} value={solarPanel.id}  >
+                  {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }) => (
+                    <option key={row.id} value={solarPanel.id}  >
                       {solarPanel.name+" ("+solarPanel.efficiency+"%)"}
                     </option>
                   ))}
