@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import regex from '../../utils/regex';
 import notRed from "../../assets/not-red.svg";
 import checkGreen from "../../assets/check-green.svg";
+import { useState } from "react";
 
 type ICreateUserData = {
     first_name: string;
@@ -39,6 +40,7 @@ const schema = yup.object({
 
 export default function SignUp() {
     const navigate = useNavigate()
+    const [feedback, setfeedback] = useState('');
 
     const { register, 
             handleSubmit : onSubmit,
@@ -55,7 +57,12 @@ export default function SignUp() {
                 console.log(response)
                 if (response.ok) {
                     navigate("/registered")
+                    return
                 }
+                return response.json();
+              })
+              .then((data) => {
+                setfeedback(data["error"])
               })
               .catch((error) => {
                 console.log('error: ' + error);
@@ -136,6 +143,11 @@ export default function SignUp() {
                         {errors.confirmPassword?.message}
                     </span>
                 </div>
+                
+                <div>
+                   <label className="feedback">{feedback}</label> 
+                </div>
+
                 <div className="container-login100-form-btn p-t-20">
                     <div className="wrap-login100-form-btn">
                         <div className="login100-form-bgbtn"></div>

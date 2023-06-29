@@ -1,10 +1,11 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from 'moment-timezone';
+import Cookies from 'js-cookie';
 
 const NewProject = () => {
-  const location = useLocation();
   const navigate = useNavigate()
+  const [jwt, setJwt] = useState('');
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [startAt, setStartAt] = useState('');
@@ -18,6 +19,12 @@ const NewProject = () => {
   const [solarPanels, setSolarPanels] = useState([] as any);
 
   useEffect(() => {
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      throw Error("error: No access token. Please login first.");
+    }
+    setJwt(String(jwt))
+
     let tempDate = new Date();
     let date = tempDate.getFullYear() + '-' + ("0" + (tempDate.getMonth() + 1)).slice(-2) + '-' + tempDate.getDate(); 
     let time = ("0" + (tempDate.getHours())).slice(-2)  +':'+  ("0" + (tempDate.getMinutes())).slice(-2) +':'+  ("0" + (tempDate.getSeconds())).slice(-2)
@@ -41,7 +48,7 @@ const NewProject = () => {
 
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -90,7 +97,7 @@ const NewProject = () => {
     }
     fetch(`http://localhost:8000/api/v1/project/create`, {
       method: 'POST', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       body: JSON.stringify(data)
       })
       .then((response) => {
@@ -153,7 +160,7 @@ const NewProject = () => {
     if (target.productId == 0){
       fetch(`http://localhost:8000/api/v1/product/create`, {
         method: 'POST', 
-        headers: {'Authorization': "bearer "+location.state.access_token},
+        headers: {'Authorization': "bearer "+jwt},
         body: JSON.stringify(data)
         })
         .then((response) => {
@@ -178,7 +185,7 @@ const NewProject = () => {
     } else {
       fetch(`http://localhost:8000/api/v1/product/update/`+target.productId, {
         method: 'PUT', 
-        headers: {'Authorization': "bearer "+location.state.access_token},
+        headers: {'Authorization': "bearer "+jwt},
         body: JSON.stringify(data)
         })
         .then((response) => {
@@ -195,7 +202,8 @@ const NewProject = () => {
   };
 
   const handleBackLink = () => {
-    navigate("/projectlist", {state:{access_token:location.state.access_token}})
+    navigate("/projectlist")
+    return
   };
 
   return (

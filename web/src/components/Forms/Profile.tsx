@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import {useLocation, useNavigate}  from "react-router-dom";
 import '../../global.css';
+import Cookies from 'js-cookie';
 
 export default function ManageProfile() {
-  const location = useLocation();
   const navigate = useNavigate()
+  const [jwt, setJwt] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,9 +14,15 @@ export default function ManageProfile() {
   const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      throw Error("error: No access token. Please login first.");
+    }
+    setJwt(String(jwt))
+    
     fetch(`http://localhost:8000/api/v1/user/`, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -35,7 +42,8 @@ export default function ManageProfile() {
   }, []);
 
   const handleBackLink = () => {
-    navigate("/projectlist",{state:{access_token:location.state.access_token}})
+    navigate("/projectlist")
+    return
   };
 
   const handleSave = (e: { preventDefault: () => void; }) => {
@@ -51,7 +59,7 @@ export default function ManageProfile() {
       }
       fetch(`http://localhost:8000/api/v1/user/update`, {
       method: 'PUT', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       body: JSON.stringify(data)
       })
       .then((response) => {
@@ -76,7 +84,7 @@ export default function ManageProfile() {
     e.preventDefault();
     fetch(`http://localhost:8000/api/v1/user/delete`, {
     method: 'DELETE', 
-    headers: {'Authorization': "bearer "+location.state.access_token},
+    headers: {'Authorization': "bearer "+jwt},
     })
     .then((response) => {
       if (response.ok) {
@@ -84,8 +92,8 @@ export default function ManageProfile() {
       }
     }).then((data) => {
       navigate("/")
-    })
-    .catch((error) => {
+      return
+    }).catch((error) => {
       console.log('error: ' + error);
     });
   }

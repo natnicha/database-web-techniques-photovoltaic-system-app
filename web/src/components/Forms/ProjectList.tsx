@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
   const keyValuePairs = [];
@@ -12,21 +13,27 @@ function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
 }
 
 const ProjectList = () => {
-  const location = useLocation();
+  const [jwt, setJwt] = useState('');
   const [data, setData] = useState([] as any);
   const [searchQuery, setSearchQuery] = useState('');
   const [status, setStatus] = useState('');
   const navigate = useNavigate()
 
   useEffect(() => {
-  const queryString = objToQueryString({
-    "name": searchQuery,
-    "is_printed": status
-  });
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      throw Error("error: No access token. Please login first.");
+    }
+    setJwt(String(jwt))
+
+    const queryString = objToQueryString({
+      "name": searchQuery,
+      "is_printed": status
+    });
 
     fetch(`http://localhost:8000/api/v1/project/`+queryString, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -64,7 +71,8 @@ const ProjectList = () => {
   };
 
   const handleCreateProject = () => {
-    navigate("/newproject",{state:{access_token:location.state.access_token}})
+    navigate("/newproject")
+    return
   };
   
   const handleStatusChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -79,17 +87,19 @@ const ProjectList = () => {
         break;
       }
     }
-    navigate("/editproject",{state:{access_token:location.state.access_token, data:[targetProject], project_id:id}})
+    navigate("/editproject",{state:{data:[targetProject], project_id:id}})
+    return
   };
   
   const handleProfile = () => {
-    navigate("/profile",{state:{access_token:location.state.access_token}})
+    navigate("/profile")
+    return
   };
 
   const handleLogoutLink = () => {
     fetch(`http://localhost:8000/api/v1/user/logout`, {
       method: 'POST', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -97,8 +107,9 @@ const ProjectList = () => {
         }
       }).then((data) => {
         if (data!=null){
-          location.state.access_token = data.access_token
-          navigate("/",{state:{access_token:location.state.access_token}})
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       })
       .catch((error) => {

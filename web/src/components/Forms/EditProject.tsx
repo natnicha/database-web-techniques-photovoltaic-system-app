@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {useLocation, useNavigate}  from "react-router-dom";
 import '../../global.css';
 import { latLngBounds } from "leaflet";
+import Cookies from "js-cookie";
 
 function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
   const keyValuePairs = [];
@@ -48,6 +49,7 @@ export default function EditProject() {
   
   const navigate = useNavigate()
   const location = useLocation();
+  const [jwt, setJwt] = useState('');
   const [products, setProducts] = useState([] as any);
   const [mapSetting, setMapSetting] = useState({south:0.0, west:0.0, north:0.0, east:0.0});
   let solarPanel = {}
@@ -61,9 +63,20 @@ export default function EditProject() {
   const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
+    if (location.state === undefined || location.state == null ){
+      navigate("/projectlist")
+      return
+    }
+    
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      throw Error("error: No access token. Please login first.");
+    }
+    setJwt(String(jwt))
+
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -82,7 +95,7 @@ export default function EditProject() {
 
     fetch(`http://localhost:8000/api/v1/project/?filter=id:`+location.state.data[0].id, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -122,7 +135,7 @@ export default function EditProject() {
 
     fetch(`http://localhost:8000/api/v1/product/`+queryString, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -162,11 +175,11 @@ export default function EditProject() {
     event.preventDefault()
     fetch(`http://localhost:8000/api/v1/project/delete/`+location.state.data[0].id, {
       method: 'DELETE', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
-          navigate("/projectlist",{state:{access_token:location.state.access_token}})
+          navigate("/projectlist")
           console.log("delete successfully!")
           return response.json()
         }
@@ -178,14 +191,15 @@ export default function EditProject() {
   };
 
   const handleBackLink = () => {
-    navigate("/projectlist", {state:{access_token:location.state.access_token}})
+    navigate("/projectlist")
+    return
   };
 
   const handleExportReport =  (event: { preventDefault: () => void;}) => {
     event.preventDefault();
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -200,7 +214,7 @@ export default function EditProject() {
 
     fetch(`http://localhost:8000/api/v1/project/generate-report/`+location.state.data[0].id, {
       method: 'POST', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -213,7 +227,7 @@ export default function EditProject() {
       
     fetch(`http://localhost:8000/api/v1/project/?filter=id:`+location.state.data[0].id, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })
       .then((response) => {
         if (response.ok) {
@@ -253,7 +267,7 @@ export default function EditProject() {
 
       fetch(`http://localhost:8000/api/v1/product/?filter=project_id:`+location.state.data[0].id, {
         method: 'GET', 
-        headers: {'Authorization': "bearer "+location.state.access_token},
+        headers: {'Authorization': "bearer "+jwt},
         })
         .then((response) => {
           if (response.ok) {
@@ -292,7 +306,8 @@ export default function EditProject() {
 
   const handleAddNewProduct =  (event: { preventDefault: () => void;}) => {
     event.preventDefault();
-    navigate("/newproduct",{state:{access_token:location.state.access_token, project:location.state.data}})
+    navigate("/newproduct",{state:{project:location.state.data}})
+    return
   };
 
   const handleRowClick = (id: number) => {
@@ -304,7 +319,8 @@ export default function EditProject() {
           break;
         }
       }
-      navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, project:location.state.data}})
+      navigate("/editproduct",{state:{product:targetProduct, project:location.state.data}})
+      return
     }
   };
 

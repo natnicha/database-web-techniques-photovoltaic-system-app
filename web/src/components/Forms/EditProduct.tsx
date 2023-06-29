@@ -1,9 +1,11 @@
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import {useLocation, useNavigate}  from "react-router-dom";
 
 const editProduct = () => {
   const navigate = useNavigate()
   const location = useLocation();
+  const [jwt, setJwt] = useState('');
   const [latitude, setLatitude] = useState('' as any);
   const [longitude, setLongitude] = useState('' as any);
   const [area, setArea] = useState('' as any);
@@ -13,6 +15,16 @@ const editProduct = () => {
   const [solarPanels, setSolarPanels] = useState([] as any);
 
   useEffect(() => {
+    if (location.state === undefined || location.state == null ){
+      navigate("/projectlist")
+      return
+    }
+    let jwt = Cookies.get('jwt')?.toString()
+    if ( typeof(jwt) == 'undefined' && jwt == null){
+      throw Error("error: No access token. Please login first.");
+    }
+    setJwt(String(jwt))
+
     setLatitude(location.state.product.geolocation.split(",")[0])
     setLongitude(location.state.product.geolocation.split(",")[1])
     setArea(location.state.product.area)
@@ -22,7 +34,7 @@ const editProduct = () => {
     
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -74,7 +86,7 @@ const editProduct = () => {
     }
     fetch(`http://localhost:8000/api/v1/product/update/`+location.state.product.id, {
       method: 'PUT', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       body: JSON.stringify(data)
       })
       .then((response) => {
@@ -93,7 +105,7 @@ const editProduct = () => {
     event.preventDefault();
     fetch(`http://localhost:8000/api/v1/product/delete/`+location.state.product.id, {
       method: 'DELETE', 
-      headers: {'Authorization': "bearer "+location.state.access_token},
+      headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
         if (response.ok) {
@@ -107,7 +119,8 @@ const editProduct = () => {
   };
 
   const handleBackLink = () => {
-    navigate("/editproject",{state:{access_token:location.state.access_token, data:location.state.project, project_id:location.state.project[0].id}})
+    navigate("/editproject",{state:{data:location.state.project, project_id:location.state.project[0].id}})
+    return
   };
 
   return (
