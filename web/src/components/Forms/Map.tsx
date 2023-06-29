@@ -48,8 +48,6 @@ export default function Map() {
   
   const navigate = useNavigate()
   const location = useLocation();
-  const [project, setProject] = useState([] as any);
-  const [totalEnergy, setTotalEnergy] = useState(0);
   const [products, setProducts] = useState([] as any);
   const [mapSetting, setMapSetting] = useState({south:0.0, west:0.0, north:0.0, east:0.0});
   let solarPanel = {}
@@ -59,14 +57,10 @@ export default function Map() {
   const [startAt, setStartAt] = useState('');
   const [status, setStatus] = useState('');
   const [generatedEnergy, setGeneratedEnergy] = useState('');
+  const [isPrinted, setIsPrinted] = useState(false);
+  const [feedback, setFeedback] = useState('');
 
   useEffect(() => {
-    setProject(location.state.data)
-    setProjectName(location.state.data[0].name)
-    setProjectDescription(location.state.data[0].description)
-    setStartAt(location.state.data[0].start_at)
-    setStatus(location.state.data[0].is_printed)
-
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
       headers: {'Authorization': "bearer "+location.state.access_token},
@@ -85,7 +79,47 @@ export default function Map() {
     const queryString = objToQueryString({
       "project_id": location.state.data[0].id,
     });
-    
+
+    fetch(`http://localhost:8000/api/v1/project/?filter=id:`+location.state.data[0].id, {
+      method: 'GET', 
+      headers: {'Authorization': "bearer "+location.state.access_token},
+      })
+      .then((response) => {
+        if (response.ok) {
+            return response.json()
+        }
+      }).then((data) => {
+        if (data != null){
+          const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
+            { 'id': element.id, 
+            'user_id': element.user_id,
+            'name': element.name,
+            'description': element.description,
+            'start_at': new Date(element.start_at).toLocaleString(
+              "en-US",
+                {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  second: "numeric" 
+                }
+            ) ,
+            'is_printed': String(element.is_printed) === "true"? "Printed" : "Open",
+            'generated_energy': 0
+          }));
+          setProjectName(result[0].name)
+          setProjectDescription(result[0].description)
+          setStartAt(result[0].start_at)
+          setStatus(result[0].is_printed)
+          setIsPrinted(data.data[0].is_printed)
+        }
+      })
+      .catch((error) => {
+        console.log('error: ' + error);
+      });
+
     fetch(`http://localhost:8000/api/v1/product/`+queryString, {
       method: 'GET', 
       headers: {'Authorization': "bearer "+location.state.access_token},
@@ -118,7 +152,6 @@ export default function Map() {
           total += solarPanel.generated_energy
         }
         setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
-        setTotalEnergy(Number(parseFloat(total.toString()).toFixed(2)))
       })  
       .catch((error) => {
         console.log('error: ' + error);
@@ -171,7 +204,6 @@ export default function Map() {
       })
       .then((response) => {
         if (response.ok) {
-          console.log("Export report(s) successfully!")
           return response.json()
         }
       }) 
@@ -203,13 +235,16 @@ export default function Map() {
                   hour: "numeric",
                   minute: "numeric",
                   second: "numeric" 
-  
                 }
             ) ,
             'is_printed': String(element.is_printed) === "true"? "Printed" : "Open",
             'generated_energy': 0
           }));
-          setProject(result)
+          setProjectName(result[0].name)
+          setProjectDescription(result[0].description)
+          setStartAt(result[0].start_at)
+          setStatus(result[0].is_printed)
+          setIsPrinted(data.data[0].is_printed)
         }
       })
       .catch((error) => {
@@ -246,8 +281,8 @@ export default function Map() {
               total += solarPanel.generated_energy
             }
             setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
-            setTotalEnergy(Number(parseFloat(total.toString()).toFixed(2)))
             setProducts(result)
+            setFeedback("Report(s) will be sent to you email and update information on this page soon.")
           }
         })
         .catch((error) => {
@@ -261,14 +296,16 @@ export default function Map() {
   };
 
   const handleRowClick = (id: number) => {
-    let targetProduct
-    for (const product of products) {
-      if (id == product.id) {
-        targetProduct = product
-        break;
+    if (!isPrinted) {
+      let targetProduct
+      for (const product of products) {
+        if (id == product.id) {
+          targetProduct = product
+          break;
+        }
       }
+      navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, project:location.state.data}})
     }
-    navigate("/editproduct",{state:{access_token:location.state.access_token, product:targetProduct, project:location.state.data}})
   };
 
   return (
@@ -304,13 +341,18 @@ export default function Map() {
 
       <form>
         <div>
-          <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
-          onClick={(event) => handleExportReport(event)}>
+          <label className="feedback">
+            {feedback}</label>
+        </div>
+        <div>
+          <button className="my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+          onClick={(event) => handleExportReport(event)}
+          disabled={isPrinted}>
             Export Report
             </button>
         </div>
         {products.length > 0 && (
-          <table className="wrapper 2 highlight" >
+          <table className="wrapper 2" >
             <tbody>
               <tr className="noHover">
                 <th className="box">Name</th>
@@ -338,8 +380,9 @@ export default function Map() {
           </table>
         )}
         <div>
-          <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
-            onClick={(event) => handleAddNewProduct(event)}>
+          <button className="my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+            onClick={(event) => handleAddNewProduct(event)}
+            disabled={isPrinted}>
               Add new product
           </button>
         </div>
@@ -380,8 +423,9 @@ export default function Map() {
         )}
         
         <div>
-          <button className="rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 
-          onClick={(event) => handleDelete(event)}>
+          <button className="my-button rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 
+          onClick={(event) => handleDelete(event)}
+          disabled={isPrinted}>
             Delete Project
             </button>
         </div>

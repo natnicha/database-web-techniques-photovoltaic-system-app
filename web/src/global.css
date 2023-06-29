@@ -333,6 +333,11 @@ tr:hover {
   cursor: auto
 }
 
+.feedback {
+  text-align: center;
+  color: #ea4335;
+  font-size: 14px;
+}
 /*------------------------------------------------------------------
 [ Form ]*/
 
