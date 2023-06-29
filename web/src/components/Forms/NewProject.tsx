@@ -239,7 +239,10 @@ const NewProject = () => {
               onChange={handleStartAtChange}
             />
           </td>
+        </tr>
 
+        <tr>
+          <td></td>
           <td>
             <input
               type="time"
@@ -281,8 +284,8 @@ const NewProject = () => {
             <th>latitude</th>
             <th>Solar Panel</th>
             <th>area[sq.m.]</th>
-            <th>orientation/tile[°]</th>
-            <th>inclination/azimuth[°]</th>
+            <th>orientatione[°]</th>
+            <th>inclination[°]</th>
           </tr>
         </thead>
         <tbody>
