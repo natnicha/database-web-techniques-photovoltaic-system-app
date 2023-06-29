@@ -70,6 +70,7 @@ export default function SignIn() {
         }
       })
       .catch((error) => {
+        setFeedback("couldn't connect to the server")
         console.log('error: ' + error);
       });
   };
