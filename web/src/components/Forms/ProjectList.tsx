@@ -24,7 +24,7 @@ const ProjectList = () => {
     "is_printed": status
   });
 
-  fetch(`http://localhost:8000/api/v1/project/`+queryString, {
+    fetch(`http://localhost:8000/api/v1/project/`+queryString, {
       method: 'GET', 
       headers: {'Authorization': "bearer "+location.state.access_token},
       })
@@ -115,11 +115,15 @@ const ProjectList = () => {
         </div>
       {data.length > 0 && (
         <table className="wrapper" >
-          <ul>
-            <th className="box a">Name</th>
-            <th className="box b">Description</th>
-            <th className="box c">Date<br/>(local time)</th>
-            <th className="box d">Status</th>
+          <thead>
+            <tr>
+              <th className="box a noHover">Name</th>
+              <th className="box b noHover">Description</th>
+              <th className="box c noHover">Date<br/>(local time)</th>
+              <th className="box d noHover">Status</th>
+            </tr>
+          </thead>
+          <tbody>
             {data.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; }) =>
               <tr key={item.id}  onClick={() => handleRowClick(item.id)}> 
                 <td className="box a">{item.name}</td>
@@ -128,7 +132,7 @@ const ProjectList = () => {
                 <td className="box d">{item.is_printed}</td>
               </tr> 
             )}
-          </ul>
+          </tbody>
         </table>
       )}
       </form>

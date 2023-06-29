@@ -54,8 +54,18 @@ export default function Map() {
   const [mapSetting, setMapSetting] = useState({south:0.0, west:0.0, north:0.0, east:0.0});
   let solarPanel = {}
 
+  const [projectName, setProjectName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
+  const [startAt, setStartAt] = useState('');
+  const [status, setStatus] = useState('');
+  const [generatedEnergy, setGeneratedEnergy] = useState('');
+
   useEffect(() => {
     setProject(location.state.data)
+    setProjectName(location.state.data[0].name)
+    setProjectDescription(location.state.data[0].description)
+    setStartAt(location.state.data[0].start_at)
+    setStatus(location.state.data[0].is_printed)
 
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
       method: 'GET', 
@@ -107,6 +117,7 @@ export default function Map() {
         for (const solarPanel of result) {
           total += solarPanel.generated_energy
         }
+        setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
         setTotalEnergy(Number(parseFloat(total.toString()).toFixed(2)))
       })  
       .catch((error) => {
@@ -114,7 +125,8 @@ export default function Map() {
       });
   }, []);
   
-  const handleDelete = () => {
+  const handleDelete = (event: { preventDefault: () => void;}) => {
+    event.preventDefault()
     fetch(`http://localhost:8000/api/v1/project/delete/`+location.state.data[0].id, {
       method: 'DELETE', 
       headers: {'Authorization': "bearer "+location.state.access_token},
@@ -233,6 +245,7 @@ export default function Map() {
             for (const solarPanel of result) {
               total += solarPanel.generated_energy
             }
+            setGeneratedEnergy(parseFloat(total.toString()).toFixed(2))
             setTotalEnergy(Number(parseFloat(total.toString()).toFixed(2)))
             setProducts(result)
           }
@@ -260,116 +273,122 @@ export default function Map() {
 
   return (
     <div className="wrap-projectlist">
+      <table>
+        <tbody>
+          <tr className="noHover">
+            <td><label className="project-header p-r-80" htmlFor="projectName">Name:</label></td>
+            <td><label>{projectName}</label></td>
+          </tr>
+
+          <tr className="noHover">
+            <td><label className="project-header p-r-80" htmlFor="projectDescription">Description:</label></td>
+            <td><label>{projectDescription}</label></td>
+          </tr>
+
+          <tr className="noHover">
+            <td><label className="project-header p-r-80" htmlFor="startAt">Start At (local time):</label></td>
+            <td><label>{startAt}</label></td>
+          </tr>
+            
+          <tr className="noHover">
+            <td><label className="project-header p-r-80" htmlFor="status">Status:</label></td>
+            <td><label>{status}</label></td>
+          </tr>
+          
+          <tr className="noHover">
+            <td><label className="project-header p-r-80" htmlFor="generatedEnergy">Generated Energy:</label></td>
+            <td><label>{generatedEnergy}</label></td>
+          </tr>
+        </tbody>
+      </table>
+
       <form>
-        <div>
-          {project.length > 0 && (
-            <table className="wrapper 1" >
-              <ul>
-                <th className="box a">Name</th>
-                <th className="box b">Description</th>
-                <th className="box c">Date</th>
-                <th className="box d">Status</th>
-                <th className="box d">Total Generated Energy (kWh)</th>
-                {project.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; generated_energy:number}) =>
-                  <tr key={item.id} > 
-                    <td className="box a">{item.name}</td>
-                    <td className="box b">{item.description}</td>
-                    <td className="box c">{item.start_at}</td>
-                    <td className="box d">{item.is_printed}</td>
-                    <td className="box-number">{totalEnergy}</td>
-                  </tr> 
-                )}
-              </ul>
-            </table>
-          )}
-        </div>
         <div>
           <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
           onClick={(event) => handleExportReport(event)}>
             Export Report
             </button>
         </div>
+        {products.length > 0 && (
+          <table className="wrapper 2 highlight" >
+            <tbody>
+              <tr className="noHover">
+                <th className="box">Name</th>
+                <th className="box">Description</th>
+                <th className="box">Efficiency (%)</th>
+                <th className="box">Orientation (°)</th>
+                <th className="box">Inclination (°)</th>
+                <th className="box">Area (sq.m.)</th>
+                <th className="box">Location</th>
+                <th className="box">Generated Energy (kWh)</th>
+              </tr>
+              {products.map((item: { id: number; solar_panel_model: string, description: string, efficiency: number, orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number}) =>
+                <tr key={item.id} onClick={() => handleRowClick(item.id)} > 
+                  <td className="box">{item.solar_panel_model}</td>
+                  <td className="box">{item.description}</td>
+                  <td className="box-number">{item.efficiency}</td>
+                  <td className="box-number">{item.orientation}</td>
+                  <td className="box-number">{item.inclination}</td>
+                  <td className="box-number">{item.area}</td>
+                  <td className="box-number">{item.geolocation}</td>
+                  <td className="box-number">{item.generated_energy}</td>
+                </tr> 
+              )}
+            </tbody>
+          </table>
+        )}
         <div>
-          {products.length > 0 && (
-            <table className="wrapper 2" >
-              <ul>
-                <th className="box a">Name</th>
-                <th className="box a">Description</th>
-                <th className="box a">Efficiency (%)</th>
-                <th className="box a">Orientation (°)</th>
-                <th className="box b">Inclination (°)</th>
-                <th className="box c">Area (sq.m.)</th>
-                <th className="box d">Location</th>
-                <th className="box d">Generated Energy (kWh)</th>
-                {products.map((item: { id: number; solar_panel_model: string, description: string, efficiency: number, orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number}) =>
-                  <tr key={item.id} onClick={() => handleRowClick(item.id)} > 
-                    <td className="box a">{item.solar_panel_model}</td>
-                    <td className="box a">{item.description}</td>
-                    <td className="box-number">{item.efficiency}</td>
-                    <td className="box-number">{item.orientation}</td>
-                    <td className="box-number">{item.inclination}</td>
-                    <td className="box-number">{item.area}</td>
-                    <td className="box-number">{item.geolocation}</td>
-                    <td className="box d">{item.generated_energy}</td>
-                  </tr> 
-                )}
-              </ul>
-            </table>
-          )}
-        </div>
-        <div>
-        <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
-          onClick={(event) => handleAddNewProduct(event)}>
-            Add new product
-            </button>
+          <button className="rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+            onClick={(event) => handleAddNewProduct(event)}>
+              Add new product
+          </button>
         </div>
         {mapSetting.south != 0 && (
-            <div className="map">
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" ></script>
-                
-                <MapContainer
-                    className="markercluster-map"
-                    bounds={latLngBounds([mapSetting.south, mapSetting.west],[mapSetting.north, mapSetting.east])}
-                    zoom={3}
-                    maxZoom={6}
-                    >
-                    <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+          <div className="map">
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" ></script>
+            
+            <MapContainer
+              className="markercluster-map"
+              bounds={latLngBounds([mapSetting.south, mapSetting.west],[mapSetting.north, mapSetting.east])}
+              zoom={3}
+              maxZoom={6}
+              >
+              <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
 
-                    {products.length > 0 && (
-                      <ul>
-                        {products.map((item: { id: number; solar_panel_model: string; orientation: number; inclination: number; area: number; geolocation: string; }) =>
-                          
-                          <Marker position={[Number(item.geolocation.split(",")[0]), Number(item.geolocation.split(",")[1])]}>
-                                <Popup>
-                                    <b>model: </b> {item.solar_panel_model} <br/>
-                                    <b>location:</b> {item.geolocation} <br/>
-                                    <b>orientation:</b> {item.orientation}°<br/>
-                                    <b>inclination:</b> {item.inclination}°<br/>
-                                    <b>area:</b> {item.area} sq.m.<br/>
-                                </Popup>
-                            </Marker>
-                        )}
-                      </ul>
-                    )}
-                </MapContainer>
-            </div>
+              {products.length > 0 && (
+                <ul>
+                  {products.map((item: { id: number; solar_panel_model: string; orientation: number; inclination: number; area: number; geolocation: string; }) =>
+                    <Marker key={item.id}  position={[Number(item.geolocation.split(",")[0]), Number(item.geolocation.split(",")[1])]}>
+                      <Popup>
+                        <b>model: </b> {item.solar_panel_model} <br/>
+                        <b>location:</b> {item.geolocation} <br/>
+                        <b>orientation:</b> {item.orientation}°<br/>
+                        <b>inclination:</b> {item.inclination}°<br/>
+                        <b>area:</b> {item.area} sq.m.<br/>
+                      </Popup>
+                      </Marker>
+                  )}
+                </ul>
+              )}
+            </MapContainer>
+          </div>
         )}
         
         <div>
           <button className="rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 
-          onClick={handleDelete}>
+          onClick={(event) => handleDelete(event)}>
             Delete Project
             </button>
         </div>
         <div>
-        <label onClick={handleBackLink} className="txt2 mb-5">
-          Back
-        </label>
+          <label onClick={handleBackLink} className="txt2 mb-5">
+            Back
+          </label>
         </div>
       </form>
     </div>

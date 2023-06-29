@@ -240,8 +240,16 @@ iframe {
   border:#adadad 1px groove;
 }
 
+.project-header {
+  font-weight: bold
+}
+
 tr:hover {
   background-color: #1da1f2;
+}
+
+.noHover{
+  pointer-events: none;
 }
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/
@@ -292,7 +300,7 @@ tr:hover {
 }
 
 .wrap-projectlist {
-  width: 1000px;
+  width: 700px;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -300,7 +308,7 @@ tr:hover {
 }
 
 .wrap-newproject {
-  width: 750px;
+  width: 1050px;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -573,11 +581,6 @@ tr:hover {
     visibility: visible;
     opacity: 1;
   }
-}
-
-.feedback {
-  text-align: center;
-  color: #ea4335;
 }
 
 /*//////////////////////////////////////////////////////////////////

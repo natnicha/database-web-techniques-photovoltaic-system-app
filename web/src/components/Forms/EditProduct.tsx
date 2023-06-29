@@ -4,12 +4,12 @@ import {Link, useLocation, useNavigate}  from "react-router-dom";
 const editProduct = () => {
   const navigate = useNavigate()
   const location = useLocation();
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [area, setArea] = useState('');
-  const [orientation, setOrientation] = useState('');
-  const [inclination, setInclination] = useState('');
-  const [solarPanelId, setSolarPanelId] = useState('');
+  const [latitude, setLatitude] = useState('' as any);
+  const [longitude, setLongitude] = useState('' as any);
+  const [area, setArea] = useState('' as any);
+  const [orientation, setOrientation] = useState('' as any);
+  const [inclination, setInclination] = useState('' as any);
+  const [solarPanelId, setSolarPanelId] = useState('' as any);
   const [solarPanels, setSolarPanels] = useState([] as any);
 
   useEffect(() => {
@@ -38,27 +38,27 @@ const editProduct = () => {
 
   
   const handleLatitudeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setLatitude(event.target.value);
+    setLatitude(Number(event.target.value));
   };
   
   const handleLongitudeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setLongitude(event.target.value);
+    setLongitude(Number(event.target.value));
   };
   
   const handleAreaChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setArea(event.target.value);
+    setArea(Number(event.target.value));
   };
   
   const handleOrientationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setOrientation(event.target.value);
+    setOrientation(Number(event.target.value));
   };
   
   const handleInclinationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setInclination(event.target.value);
+    setInclination(Number(event.target.value));
   };
 
   const handleSolarPanelChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setSolarPanelId(event.target.value)
+    setSolarPanelId(Number(event.target.value))
   };
 
   const handleSaveButton = (event: { preventDefault: () => void; }) => {
@@ -120,7 +120,7 @@ const editProduct = () => {
           <div>
           <label>Latitude:</label>
           <input
-            type="text"
+            type="number"
             value={latitude}
             onChange={handleLatitudeChange}
           />
@@ -130,7 +130,7 @@ const editProduct = () => {
           <div>
             <label>Longitude:</label>
             <input
-              type="text"
+              type="number"
               value={longitude}
               onChange={handleLongitudeChange}
             ></input>
@@ -150,7 +150,7 @@ const editProduct = () => {
           <div>
             <label>Area:</label>
             <input
-              type="text"
+              type="number"
               value={area}
               onChange={handleAreaChange}
             ></input>
@@ -159,7 +159,7 @@ const editProduct = () => {
           <div>
             <label>Orientation:</label>
             <input
-              type="text"
+              type="number"
               value={orientation}
               onChange={handleOrientationChange}
             ></input>
@@ -168,7 +168,7 @@ const editProduct = () => {
           <div>
             <label>Inclination:</label>
             <input
-              type="text"
+              type="number"
               value={inclination}
               onChange={handleInclinationChange}
             ></input>

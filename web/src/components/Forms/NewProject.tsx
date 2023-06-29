@@ -96,7 +96,6 @@ const NewProject = () => {
       .then((response) => {
         console.log(response)
         if (response.ok) {
-          console.log('successfully created!')
           setIsCreatedProject(true)
             return response.json()
         }
@@ -108,7 +107,8 @@ const NewProject = () => {
       });
   };
 
-  const handleAddRow = () => {
+  const handleAddRow = (event: { preventDefault: () => void; }) => {
+    event.preventDefault()
     const newProductRow = {
       id:productRows.length, no:productRows.length+1, solarPanelId: 1, latitude:0, longitude:0, area:0, orientation:0, inclination:0, productId:0
     };
@@ -138,7 +138,8 @@ const NewProject = () => {
     });
   };
 
-  const handleSaveButton = (rowId: number)=> {
+  const handleSaveButton =  (event: { preventDefault: () => void;}, rowId: number) => {
+    event.preventDefault()
     let target = productRows[rowId]
     
     let data = {
@@ -259,7 +260,7 @@ const NewProject = () => {
       </span>
       <table>
         <thead>
-          <tr>
+          <tr className='noHover'>
             <th>ID</th>
             <th>latitude</th>
             <th>latitude</th>
@@ -314,17 +315,17 @@ const NewProject = () => {
               /></td>
               <td><button
                 className="wrap-input100"
-                onClick={() => handleSaveButton(row.id)}
+                onClick={(event) => handleSaveButton(event, row.id)}
               >Save</button></td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={handleAddRow}>Add Row</button>
+      <button onClick={(event) => handleAddRow(event)}>Add Row</button>
     </div>
     )}
         <div>
-          <label onClick={handleBackLink} className="txt2 mb-5">
+          <label onClick= {handleBackLink} className="txt2 mb-5">
             Back
           </label>
         </div>

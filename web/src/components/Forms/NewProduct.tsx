@@ -98,7 +98,7 @@ const editProduct = () => {
           <div>
           <label>Latitude:</label>
           <input
-            type="text"
+            type="number"
             value={latitude}
             onChange={handleLatitudeChange}
           />
@@ -107,7 +107,7 @@ const editProduct = () => {
           <div>
             <label>Longitude:</label>
             <input
-              type="text"
+              type="number"
               value={longitude}
               onChange={handleLongitudeChange}
             ></input>
@@ -127,7 +127,7 @@ const editProduct = () => {
           <div>
             <label>Area:</label>
             <input
-              type="text"
+              type="number"
               value={area}
               onChange={handleAreaChange}
             ></input>
@@ -136,7 +136,7 @@ const editProduct = () => {
           <div>
             <label>Orientation:</label>
             <input
-              type="text"
+              type="number"
               value={orientation}
               onChange={handleOrientationChange}
             ></input>
@@ -145,7 +145,7 @@ const editProduct = () => {
           <div>
             <label>Inclination:</label>
             <input
-              type="text"
+              type="number"
               value={inclination}
               onChange={handleInclinationChange}
             ></input>
