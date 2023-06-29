@@ -146,6 +146,7 @@ const ProjectList = () => {
         <div>
           <label htmlFor="searchQuery">Search:</label>
           <input
+            className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
             type="text"
             id="searchQuery"
             value={searchQuery}
@@ -155,8 +156,10 @@ const ProjectList = () => {
         </div>
 
         <div>
-          <label htmlFor="Status">Status:</label>
-          <select id="Status" value={status} onChange={handleStatusChange}>
+          <label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+            htmlFor="Status">Status:</label>
+          <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+            id="Status" value={status} onChange={handleStatusChange}>
             <option value="">All</option>
             <option value="false">Open</option>
             <option value="true">Printed</option>

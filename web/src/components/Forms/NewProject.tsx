@@ -17,6 +17,7 @@ const NewProject = () => {
   const [isCreatedProject, setIsCreatedProject] = useState(false);
   const [productId, setProductId] = useState(0);
   const [solarPanels, setSolarPanels] = useState([] as any);
+  const [feedback, setFeedback] = useState([] as any);
 
   useEffect(() => {
     let jwt = Cookies.get('jwt')?.toString()
@@ -124,7 +125,9 @@ const NewProject = () => {
   };
 
 
-  const [productRows, setProductRows] = useState([] as any);
+  const [productRows, setProductRows] = useState([{
+    id:0, no:1, solarPanelId: 1, latitude:0, longitude:0, area:0, orientation:0, inclination:0, productId:0
+  }] as any);
   
   const handleProductChange = (event: { target: { value: React.SetStateAction<string>; }; }, rowId:number, columnName: string) => {
     const { value } = event.target;
@@ -165,19 +168,16 @@ const NewProject = () => {
         body: JSON.stringify(data)
         })
         .then((response) => {
-          console.log(response)
-          if (response.ok) {
-            console.log('a product successfully saved!')
-            return response.json()
-          }
+          return response.json()
         }).then((data) => {
-          if (data != null) {
+          if (data.data != null) {
             setProductRows((prevRows: any) => {
               const updatedRows = prevRows;
               updatedRows[rowId] = { ...updatedRows[rowId], ["productId"]: data.data.id };
               return updatedRows;
             });
-            console.log(productRows)
+          } else {
+            setFeedback(data['error'])
           }
         })
         .catch((error) => {
@@ -215,23 +215,27 @@ const NewProject = () => {
       <table>
         <tbody>
         <tr>
-          <td><label htmlFor="projectName">Name:</label></td>
+          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+              htmlFor="projectName">Name:</label></td>
           <td>
-            <input
+            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="text"
               id="projectName"
               value={projectName}
+              placeholder='project name'
               onChange={handleProjectNameChange}
             />
           </td>
         </tr>
 
         <tr>
-          <td><label htmlFor="projectDescription">Description:</label></td>
+          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+              htmlFor="projectDescription">Description:</label></td>
           <td>
-            <input
+            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="text"
               id="projectDescription"
+              placeholder='project description'
               value={projectDescription}
               onChange={handleProjectDescriptionChange}
             ></input>
@@ -239,9 +243,10 @@ const NewProject = () => {
         </tr>
 
         <tr>
-          <td><label htmlFor="startAt">Start At:</label></td>
+          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+              htmlFor="startAt">Start At:</label></td>
           <td>
-            <input
+            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="date"
               id="startAt"
               value={startAt}
@@ -253,7 +258,7 @@ const NewProject = () => {
         <tr>
           <td></td>
           <td>
-            <input
+            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="time"
               id="time"
               value={time}
@@ -266,8 +271,9 @@ const NewProject = () => {
           <td>
           </td>
           <td>
-          <select value={selectedTimezones} onChange={handleTimezoneChange} multiple={false}>
-            {timezones.map((timezone: { name: string; offset: any; }, index: React.Key | null | undefined) => (
+          <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+              value={selectedTimezones} onChange={handleTimezoneChange} multiple={false}>
+            {timezones.map((timezone: { name: string; offset: any; }, index: React.Key) => (
               <option key={index} value={timezone.name+","+timezone.offset}  >
                 {`${timezone.name} (GMT${timezone.offset})`}
               </option>
@@ -277,20 +283,21 @@ const NewProject = () => {
         </tr>
         </tbody>
       </table>
-      <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5' type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
+      <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5' 
+      type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
     
   <form onSubmit={handleSubmit}>
     {isCreatedProject && (
     <div>
-      <span className="p-b-49">
+      <span className="login100-form-title p-b-49 p-t-50">
         Product
       </span>
-      <table>
+      <table className=''>
         <thead>
-          <tr className='noHover'>
-            <th>ID</th>
+          <tr className='fs-14 noHover'>
+            <th>No</th>
             <th>latitude</th>
-            <th>latitude</th>
+            <th>longitude</th>
             <th>Solar Panel</th>
             <th>area[sq.m.]</th>
             <th>orientatione[°]</th>
@@ -301,16 +308,16 @@ const NewProject = () => {
           {productRows.map((row: { id: number; no: number; name:string; solarPanelId:number}) => (
             <tr key={row.id}>
               <td>{row.no}</td>
-              <td><input
+              <td><input  
                 type="number"
-                placeholder="latitude"
-                className="wrap-input100"
+                placeholder="lat"
+                className="wrap-input100 fs-14"
                 onChange={(event) => handleProductChange(event, row.id, "latitude")}
               /></td>
               <td><input
                 type="number"
-                placeholder="longitude"
-                className="wrap-input100"
+                placeholder="long"
+                className="wrap-input100 fs-14"
                 onChange={(event) => handleProductChange(event, row.id, "longitude")}
               /></td>
               <td> {/* value={row.solarPanelId} */}
@@ -325,30 +332,35 @@ const NewProject = () => {
               <td><input
                 type="number"
                 placeholder="area"
-                className="wrap-input100"
+                className="wrap-input100 fs-14"
                 onChange={(event) => handleProductChange(event, row.id, "area")}
               /></td> 
               <td><input
                 type="number"
                 placeholder="(0,180)"
-                className="wrap-input100"
+                className="wrap-input100 fs-14"
                 onChange={(event) => handleProductChange(event, row.id, "orientation")}
               /></td>
               <td><input
                 type="number"
                 placeholder="(-90,90)"
-                className="wrap-input100"
+                className="wrap-input100 fs-14"
                 onChange={(event) => handleProductChange(event, row.id, "inclination")}
               /></td>
               <td><button
-                className="wrap-input100"
+                className="my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[5rem] p-1 mt-5 hover:bg-[#2347C5] mb-5"
                 onClick={(event) => handleSaveButton(event, row.id)}
               >Save</button></td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={(event) => handleAddRow(event)}>Add Row</button>
+      <div>
+        <label className="feedback">
+          {feedback}</label>
+      </div>
+      <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5'
+      onClick={(event) => handleAddRow(event)}>Add Product</button>
     </div>
     )}
         <div>

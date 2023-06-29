@@ -161,6 +161,14 @@ input {
 	border: none;
 }
 
+label {
+  border-radius: 10px;
+}
+
+select {
+  border-radius: 10px;
+}
+
 textarea {
   outline: none;
   border: none;
@@ -337,7 +345,7 @@ tr:hover {
 
 .my-button:enabled {
   opacity: 1;
-  cursor: auto
+  cursor: auto;
 }
 
 .feedback {

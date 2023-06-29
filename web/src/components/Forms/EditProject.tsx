@@ -82,7 +82,7 @@ export default function EditProject() {
       .then((response) => {
         return response.json()
       }).then((data) => {
-        if (data != null) {
+        if (data.data != null) {
           solarPanel = data.data
         } else {
           setFeedback(data["error"])
@@ -105,7 +105,7 @@ export default function EditProject() {
             return response.json()
         }
       }).then((data) => {
-        if (data != null){
+        if (data.data != null){
           const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
             { 'id': element.id, 
             'user_id': element.user_id,
@@ -147,7 +147,7 @@ export default function EditProject() {
             return response.json()
         }
       }).then((data) => {
-        if (data != null){
+        if (data.data != null){
           const result = data.data.map((element: { id: number; project_id: number; solar_panel_model_id: number; orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number }) => (
             { 
               'id': element.id,
@@ -243,7 +243,7 @@ export default function EditProject() {
             return response.json()
         }
       }).then((data) => {
-        if (data != null){
+        if (data.data != null){
           const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
             { 'id': element.id, 
             'user_id': element.user_id,
@@ -283,7 +283,7 @@ export default function EditProject() {
               return response.json()
           }
         }).then((data) => {
-          if (data != null){
+          if (data.data != null){
             const result = data.data.map((element: { id: number; project_id: number; solar_panel_model_id: number; orientation: number; inclination: number; area: number; geolocation: string; generated_energy: number }) => (
               { 
                 'id': element.id,

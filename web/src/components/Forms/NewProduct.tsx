@@ -113,8 +113,10 @@ const editProduct = () => {
           <div>
           <label>Latitude:</label>
           <input
+            className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
             type="number"
             value={latitude}
+            placeholder='latitude'
             onChange={handleLatitudeChange}
           />
           </div>
@@ -122,15 +124,18 @@ const editProduct = () => {
           <div>
             <label>Longitude:</label>
             <input
+              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="number"
               value={longitude}
+              placeholder='longitude'
               onChange={handleLongitudeChange}
             ></input>
           </div>
           
           <div>
             <label>Solar Panel:</label>
-            <select value={solarPanelId} onChange={(event) => handleSolarPanelChange(event)}>
+            <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+            value={solarPanelId} onChange={(event) => handleSolarPanelChange(event)}>
               {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }, index: React.Key) => (
                 <option key={index} value={solarPanel.id}  >
                   {solarPanel.name+" ("+solarPanel.efficiency+"%)"}
@@ -142,8 +147,10 @@ const editProduct = () => {
           <div>
             <label>Area:</label>
             <input
+              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="number"
               value={area}
+              placeholder='area'
               onChange={handleAreaChange}
             ></input>
           </div>
@@ -151,8 +158,10 @@ const editProduct = () => {
           <div>
             <label>Orientation:</label>
             <input
+              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="number"
               value={orientation}
+              placeholder='orientation'
               onChange={handleOrientationChange}
             ></input>
           </div>
@@ -160,8 +169,10 @@ const editProduct = () => {
           <div>
             <label>Inclination:</label>
             <input
+              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
               type="number"
               value={inclination}
+              placeholder='inclination'
               onChange={handleInclinationChange}
             ></input>
           </div>

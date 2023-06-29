@@ -30,7 +30,7 @@ export default function ManageProfile() {
             return response.json()
         }
       }).then((data) => {
-        if (data != null) {
+        if (data.data != null) {
           setFirstName(data.data.first_name)
           setLastName(data.data.last_name)
           setEmail(data.data.email)
