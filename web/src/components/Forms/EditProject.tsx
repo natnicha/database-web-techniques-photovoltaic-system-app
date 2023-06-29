@@ -44,7 +44,7 @@ function findSolarPanelById(masterSolarPanel: any, targetId: number){
   return {}
 }
 
-export default function Map() {
+export default function EditProject() {
   
   const navigate = useNavigate()
   const location = useLocation();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useLocation, useNavigate}  from "react-router-dom";
+import {useLocation, useNavigate}  from "react-router-dom";
 
 const editProduct = () => {
   const navigate = useNavigate()
@@ -107,7 +107,7 @@ const editProduct = () => {
   };
 
   const handleBackLink = () => {
-    navigate("/map",{state:{access_token:location.state.access_token, data:location.state.project, project_id:location.state.project[0].id}})
+    navigate("/editproject",{state:{access_token:location.state.access_token, data:location.state.project, project_id:location.state.project[0].id}})
   };
 
   return (

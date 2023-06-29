@@ -10,12 +10,11 @@ import App from './App'
 import './global.css';
 import './util.css';
 
-import AllowedAccess from './components/AllowedAccess';
 import RouterError from './components/RouterError';
 import SignIn from './components/Forms/SignIn';
 import SignUp from './components/Forms/SignUp';
 import Registered from './components/Registered';
-import Map from './components/Forms/Map';
+import EditProject from './components/Forms/EditProject';
 import Profile from './components/Forms/Profile';
 import ProjectList from './components/Forms/ProjectList';
 import NewProject from './components/Forms/NewProject';
@@ -39,8 +38,8 @@ const router = createBrowserRouter([
     errorElement: <RouterError />,
   },
   {
-    path: "/map",
-    element: <Map/>,
+    path: "/editproject",
+    element: <EditProject/>,
     errorElement: <RouterError />,
   },
   {

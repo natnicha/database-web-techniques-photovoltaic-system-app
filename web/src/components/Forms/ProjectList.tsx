@@ -79,9 +79,34 @@ const ProjectList = () => {
         break;
       }
     }
-    navigate("/map",{state:{access_token:location.state.access_token, data:[targetProject], project_id:id}})
+    navigate("/editproject",{state:{access_token:location.state.access_token, data:[targetProject], project_id:id}})
   };
   
+  const handleProfile = () => {
+    navigate("/profile",{state:{access_token:location.state.access_token}})
+  };
+
+  const handleLogoutLink = () => {
+    fetch(`http://localhost:8000/api/v1/user/logout`, {
+      method: 'POST', 
+      headers: {'Authorization': "bearer "+location.state.access_token},
+      })
+      .then((response) => {
+        if (response.ok) {
+            return response.json()
+        }
+      }).then((data) => {
+        if (data!=null){
+          location.state.access_token = data.access_token
+          navigate("/",{state:{access_token:location.state.access_token}})
+        }
+      })
+      .catch((error) => {
+        console.log('error: ' + error);
+      });
+      
+  };
+
   return (
     <div className='wrap-login100'>
       <form>
@@ -136,6 +161,12 @@ const ProjectList = () => {
         </table>
       )}
       </form>
+      <div>
+        <img src="../src/assets/profile.png" width={150} onClick={handleProfile}></img>
+        <label onClick={handleLogoutLink} className="txt2 mb-5">
+          Log Out
+        </label>
+      </div>
     </div>
   );
 };
