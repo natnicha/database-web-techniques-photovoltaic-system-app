@@ -472,7 +472,6 @@ export default function EditProject() {
               Add new product
           </button>
         </div>
-        {mapSetting.south != 0 && (
           <div className="map">
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -506,7 +505,6 @@ export default function EditProject() {
               )}
             </MapContainer>
           </div>
-        )}
         
         <div>
           <button className="my-button rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 

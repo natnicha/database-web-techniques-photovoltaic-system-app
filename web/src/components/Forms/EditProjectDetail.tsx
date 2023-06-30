@@ -88,6 +88,7 @@ const editProjectDetail = () => {
           let offset = moment().tz(timeZone).format('Z')
           console.log(timeZone+","+String(result[0].start_date).substring(String(result[0].start_date).length-6))
           setSelectedTimezones(timeZone+","+String(result[0].start_date).substring(String(result[0].start_date).length-6));
+          setSelectedTimezoneOffset(offset)
         } else {
           setFeedback(data["error"])
         }

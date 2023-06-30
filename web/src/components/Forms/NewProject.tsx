@@ -220,6 +220,7 @@ const NewProject = () => {
               updatedRows[rowId] = { ...updatedRows[rowId], ["productId"]: data.data.id };
               return updatedRows;
             });
+            setFeedback("saved successfully")
           } else {
             setFeedback(data['error'])
           }
@@ -237,6 +238,7 @@ const NewProject = () => {
           console.log(response)
           if (response.ok) {
             console.log('a product successfully saved!')
+            setFeedback("saved successfully")
             return response.json()
           }
         })
@@ -254,7 +256,7 @@ const NewProject = () => {
   return (
     <div className='wrap-newproject'>
       <span className="login100-form-title p-b-49">
-        New Project
+        New Project 
       </span>
           <label className='block mb-2 text-sm font-bold text-gray-700' 
               htmlFor="projectName">Name</label>
@@ -330,36 +332,42 @@ const NewProject = () => {
       <span className="login100-form-title p-b-49 p-t-50">
         Product
       </span>
-      <table className=''>
+      <table className='wrapper'>
         <thead>
-          <tr className='fs-14 noHover'>
-            <th>No</th>
-            <th>latitude</th>
-            <th>longitude</th>
-            <th>Solar Panel</th>
-            <th>area[sq.m.]</th>
-            <th>orientatione[°]</th>
-            <th>inclination[°]</th>
+          <tr className='noHover'>
+            <th className='box noHover'>No</th>
+            <th className='box noHover'>latitude</th>
+            <th className='box noHover'>longitude</th>
+            <th className='box noHover'>Solar Panel</th>
+            <th className='box noHover'>area<br/>[sq.m.]</th>
+            <th className='box noHover'>orientatione<br/>[°]</th>
+            <th className='box noHover'>inclination<br/>[°]</th>
           </tr>
         </thead>
         <tbody>
           {productRows.map((row: { id: number; no: number; name:string; solarPanelId:number}) => (
             <tr key={row.id}>
-              <td>{row.no}</td>
+              <td>
+                <input type="number"
+                placeholder="no"
+                className="wrap-table"
+                value={row.no}
+                disabled
+                /></td>
               <td><input  
                 type="number"
                 placeholder="lat"
-                className="wrap-input100 fs-14"
+                className="wrap-table"
                 onChange={(event) => handleProductChange(event, row.id, "latitude")}
               /></td>
               <td><input
                 type="number"
                 placeholder="long"
-                className="wrap-input100 fs-14"
+                className="wrap-table"
                 onChange={(event) => handleProductChange(event, row.id, "longitude")}
               /></td>
-              <td> {/* value={row.solarPanelId} */}
-                <select  onChange={(event) => handleSolarPanelChange(event, row.id)}>
+              <td>
+                <select className='wrap-table' onChange={(event) => handleSolarPanelChange(event, row.id)}>
                   {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }) => (
                     <option key={row.id} value={solarPanel.id}  >
                       {solarPanel.name+" ("+solarPanel.efficiency+"%)"}
@@ -370,23 +378,23 @@ const NewProject = () => {
               <td><input
                 type="number"
                 placeholder="area"
-                className="wrap-input100 fs-14"
+                className="wrap-table"
                 onChange={(event) => handleProductChange(event, row.id, "area")}
               /></td> 
               <td><input
                 type="number"
                 placeholder="(0,180)"
-                className="wrap-input100 fs-14"
+                className="wrap-table"
                 onChange={(event) => handleProductChange(event, row.id, "orientation")}
               /></td>
               <td><input
                 type="number"
                 placeholder="(-90,90)"
-                className="wrap-input100 fs-14"
+                className="wrap-table"
                 onChange={(event) => handleProductChange(event, row.id, "inclination")}
               /></td>
               <td><button
-                className="my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[5rem] p-1 mt-5 hover:bg-[#2347C5] mb-5"
+                className="my-button bg-[#3D5FD9] text-[#F5F7FF] p-1 m-5 hover:bg-[#2347C5] mb-5"
                 onClick={(event) => handleSaveButton(event, row.id)}
               >Save</button></td>
             </tr>

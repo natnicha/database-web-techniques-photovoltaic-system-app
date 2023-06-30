@@ -12,7 +12,7 @@ function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
       keyValuePairs.push(encodeURIComponent(key) + ':' + encodeURIComponent(obj[key]));
     }
   }
-  return "?filter="+ keyValuePairs.join('&');
+  return "&filter="+ keyValuePairs.join('&');
 }
 
 const ProjectList = () => {
@@ -35,7 +35,7 @@ const ProjectList = () => {
       "is_printed": status
     });
 
-    fetch(`http://localhost:8000/api/v1/project/`+queryString, {
+    fetch(`http://localhost:8000/api/v1/project/?sort_by=start_at&order_by=desc`+queryString, {
       method: 'GET', 
       headers: {'Authorization': "bearer "+jwt},
       })
@@ -182,19 +182,19 @@ const ProjectList = () => {
         <table className="wrapper" >
           <thead>
             <tr>
-              <th className="box a noHover">Name</th>
-              <th className="box b noHover">Description</th>
-              <th className="box c noHover">Date<br/>(local time)</th>
-              <th className="box d noHover">Status</th>
+              <th className="box noHover">Name</th>
+              <th className="box noHover">Description</th>
+              <th className="box noHover">Date<br/>(local time)</th>
+              <th className="box noHover">Status</th>
             </tr>
           </thead>
           <tbody>
             {data.map((item: { id: number; name: string; description: string; start_at: string; is_printed: string; }) =>
               <tr key={item.id}  onClick={() => handleRowClick(item.id)}> 
-                <td className="box a">{item.name}</td>
-                <td className="box b">{item.description}</td>
-                <td className="box c">{item.start_at}</td>
-                <td className="box d">{item.is_printed}</td>
+                <td className="box">{item.name}</td>
+                <td className="box">{item.description}</td>
+                <td className="box">{item.start_at}</td>
+                <td className="box">{item.is_printed}</td>
               </tr> 
             )}
           </tbody>
