@@ -37,6 +37,11 @@ const editProduct = () => {
         if (response.ok) {
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
         setSolarPanels(data.data)
       })
@@ -92,6 +97,11 @@ const editProduct = () => {
           handleBackLink()
           return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -111,9 +121,9 @@ const editProduct = () => {
             New Product
           </span>
           <div>
-          <label>Latitude:</label>
+          <label className='block mb-2 text-sm font-bold text-gray-700' >Latitude</label>
           <input
-            className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+             className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             type="number"
             value={latitude}
             placeholder='latitude'
@@ -122,9 +132,9 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Longitude:</label>
+            <label className='block mb-2 text-sm font-bold text-gray-700' >Longitude</label>
             <input
-              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+               className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
               type="number"
               value={longitude}
               placeholder='longitude'
@@ -134,7 +144,7 @@ const editProduct = () => {
           
           <div>
             <label>Solar Panel:</label>
-            <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+            <select  className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             value={solarPanelId} onChange={(event) => handleSolarPanelChange(event)}>
               {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }, index: React.Key) => (
                 <option key={index} value={solarPanel.id}  >
@@ -145,9 +155,9 @@ const editProduct = () => {
           </div>
 
           <div>
-            <label>Area:</label>
+            <label className='block mb-2 text-sm font-bold text-gray-700' >Area</label>
             <input
-              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+               className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
               type="number"
               value={area}
               placeholder='area'
@@ -156,9 +166,9 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Orientation:</label>
+            <label className='block mb-2 text-sm font-bold text-gray-700' >Orientation</label>
             <input
-              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+               className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
               type="number"
               value={orientation}
               placeholder='orientation'
@@ -167,9 +177,9 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Inclination:</label>
+            <label className='block mb-2 text-sm font-bold text-gray-700' >Inclination</label>
             <input
-              className='input100 block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "input100 block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+               className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
               type="number"
               value={inclination}
               placeholder='inclination'

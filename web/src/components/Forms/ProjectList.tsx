@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
+  if (obj.name == "" && obj.is_printed == "") {
+    return ""
+  }
   const keyValuePairs = [];
   for (const key in obj) {
     if (obj[key] != "") {
@@ -46,25 +49,26 @@ const ProjectList = () => {
           return
         }
       }).then((data) => {
-        const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
-          { 'id': element.id, 
-          'user_id': element.user_id,
-          'name': element.name,
-          'description': element.description,
-          'start_at': new Date(element.start_at).toLocaleString(
-            "en-US",
-              {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric" 
-
-              }
-          ) ,
-          'is_printed': String(element.is_printed) === "true"? "Printed" : "Open" }));
-        setData(result)
+        if (data.data) {
+          const result = data.data.map((element: { id: any; user_id: any; name: any; description: any; start_at: any; is_printed: any; }) => (
+            { 'id': element.id, 
+            'user_id': element.user_id,
+            'name': element.name,
+            'description': element.description,
+            'start_at': new Date(element.start_at).toLocaleString(
+              "en-US",
+                {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  second: "numeric" 
+                }
+            ) ,
+            'is_printed': String(element.is_printed) === "true"? "Printed" : "Open" }));
+          setData(result)
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -144,9 +148,9 @@ const ProjectList = () => {
     <div className='wrap-login100'>
       <form>
         <div>
-          <label htmlFor="searchQuery">Search:</label>
+          <label className='block mb-2 text-sm font-bold text-gray-700' htmlFor="searchQuery">Search</label>
           <input
-            className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+            className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
             type="text"
             id="searchQuery"
             value={searchQuery}
@@ -156,9 +160,9 @@ const ProjectList = () => {
         </div>
 
         <div>
-          <label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
-            htmlFor="Status">Status:</label>
-          <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <label className='block mb-2 text-sm font-bold text-gray-700' 
+            htmlFor="Status">Status</label>
+          <select className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
             id="Status" value={status} onChange={handleStatusChange}>
             <option value="">All</option>
             <option value="false">Open</option>

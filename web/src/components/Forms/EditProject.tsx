@@ -80,7 +80,14 @@ export default function EditProject() {
       headers: {'Authorization': "bearer "+jwt},
       })  
       .then((response) => {
-        return response.json()
+        if (response.ok) {
+          return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
         if (data.data != null) {
           solarPanel = data.data
@@ -102,7 +109,12 @@ export default function EditProject() {
       })
       .then((response) => {
         if (response.ok) {
-            return response.json()
+          return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }).then((data) => {
         if (data.data != null){
@@ -144,7 +156,12 @@ export default function EditProject() {
       })  
       .then((response) => {
         if (response.ok) {
-            return response.json()
+          return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }).then((data) => {
         if (data.data != null){
@@ -192,6 +209,11 @@ export default function EditProject() {
           console.log("delete successfully!")
           return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }) 
       .catch((error) => {
         console.log('error: ' + error);
@@ -204,6 +226,11 @@ export default function EditProject() {
     return
   };
 
+  const handleEditProject = () => {
+    navigate("/editprojectdetail", {state:{project_id:location.state.data[0].id}})
+    return
+  };
+  
   const handleExportReport =  (event: { preventDefault: () => void;}) => {
     event.preventDefault();
     fetch(`http://localhost:8000/api/v1/solar-panel-model/`, {
@@ -213,6 +240,11 @@ export default function EditProject() {
       .then((response) => {
         if (response.ok) {
             return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }).then((data) => {
         solarPanel = data.data
@@ -229,6 +261,11 @@ export default function EditProject() {
         if (response.ok) {
           return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }) 
       .catch((error) => {
         console.log('error: ' + error);
@@ -241,6 +278,11 @@ export default function EditProject() {
       .then((response) => {
         if (response.ok) {
             return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }).then((data) => {
         if (data.data != null){
@@ -281,6 +323,11 @@ export default function EditProject() {
         .then((response) => {
           if (response.ok) {
               return response.json()
+          }
+          if (response.status == 401) {
+            Cookies.remove("jwt")
+            navigate("/")
+            return
           }
         }).then((data) => {
           if (data.data != null){
@@ -338,28 +385,38 @@ export default function EditProject() {
       <table>
         <tbody>
           <tr className="noHover">
-            <td><label className="project-header p-r-80" htmlFor="projectName">Name:</label></td>
-            <td><label>{projectName}</label></td>
+            <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="projectName">
+              Name</label></td>
+            <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
+              {projectName}</label></td>
           </tr>
 
           <tr className="noHover">
-            <td><label className="project-header p-r-80" htmlFor="projectDescription">Description:</label></td>
-            <td><label>{projectDescription}</label></td>
+            <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="projectDescription">
+              Description</label></td>
+            <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
+              {projectDescription}</label></td>
           </tr>
 
           <tr className="noHover">
-            <td><label className="project-header p-r-80" htmlFor="startAt">Start At (local time):</label></td>
-            <td><label>{startAt}</label></td>
+            <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="startAt">
+              Start At (local time)</label></td>
+            <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
+              {startAt}</label></td>
           </tr>
             
           <tr className="noHover">
-            <td><label className="project-header p-r-80" htmlFor="status">Status:</label></td>
-            <td><label>{status}</label></td>
+            <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="status">
+              Status</label></td>
+            <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
+              {status}</label></td>
           </tr>
           
           <tr className="noHover">
-            <td><label className="project-header p-r-80" htmlFor="generatedEnergy">Generated Energy:</label></td>
-            <td><label>{generatedEnergy}</label></td>
+            <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="generatedEnergy">
+              Generated Energy</label></td>
+            <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
+              {generatedEnergy}</label></td>
           </tr>
         </tbody>
       </table>
@@ -369,13 +426,17 @@ export default function EditProject() {
           <label className="feedback">
             {feedback}</label>
         </div>
-        <div>
-          <button className="my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
-          onClick={(event) => handleExportReport(event)}
-          disabled={isPrinted}>
+          <button className="my-button p-l-10 rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+            onClick={handleEditProject}
+            disabled={isPrinted || products.length>0}>
+            Edit Project
+          </button>
+
+          <button className="my-button p-l-10 rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[24rem] p-3 mt-5 hover:bg-[#2347C5] mb-5" 
+            onClick={(event) => handleExportReport(event)}
+            disabled={isPrinted || products.length==0}>
             Export Report
-            </button>
-        </div>
+          </button>
         {products.length > 0 && (
           <table className="wrapper 2" >
             <tbody>

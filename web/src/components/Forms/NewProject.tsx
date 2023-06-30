@@ -17,6 +17,7 @@ const NewProject = () => {
   const [isCreatedProject, setIsCreatedProject] = useState(false);
   const [productId, setProductId] = useState(0);
   const [solarPanels, setSolarPanels] = useState([] as any);
+  const [projectFeedback, setProjectFeedback] = useState([] as any);
   const [feedback, setFeedback] = useState([] as any);
 
   useEffect(() => {
@@ -56,6 +57,11 @@ const NewProject = () => {
         if (response.ok) {
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
         setSolarPanels(data.data)
       })
@@ -88,7 +94,7 @@ const NewProject = () => {
     setSelectedTimezoneOffset(offset);
   };
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
+  const handleCreateProject = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
 
     let data = {
@@ -108,8 +114,46 @@ const NewProject = () => {
           setIsCreatedProject(true)
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
-        setProductId(data.data.id)
+        if (data.data != null) {
+          setProductId(data.data.id)
+        }
+      })
+      .catch((error) => {
+        console.log('error: ' + error);
+      });
+  };
+
+  const handleUpdateProjectButton = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    
+    let data = {
+      'name': projectName,
+      'description': projectDescription,
+      'start_at': startAt +"T"+ time + selectedTimezoneOffset,
+      'is_printed': false,
+    }
+    fetch(`http://localhost:8000/api/v1/project/update/`+productId, {
+      method: 'PUT', 
+      headers: {'Authorization': "bearer "+jwt},
+      body: JSON.stringify(data)
+      })
+      .then((response) => {
+        console.log(response)
+        if (response.ok) {
+          setProjectFeedback("saved successfully")
+          return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -212,81 +256,75 @@ const NewProject = () => {
       <span className="login100-form-title p-b-49">
         New Project
       </span>
-      <table>
-        <tbody>
-        <tr>
-          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
-              htmlFor="projectName">Name:</label></td>
-          <td>
-            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <label className='block mb-2 text-sm font-bold text-gray-700' 
+              htmlFor="projectName">Name</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
               type="text"
               id="projectName"
               value={projectName}
               placeholder='project name'
               onChange={handleProjectNameChange}
             />
-          </td>
-        </tr>
 
-        <tr>
-          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
-              htmlFor="projectDescription">Description:</label></td>
-          <td>
-            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <label className='block mb-2 text-sm font-bold text-gray-700' 
+              htmlFor="projectDescription">Description</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
               type="text"
               id="projectDescription"
               placeholder='project description'
               value={projectDescription}
               onChange={handleProjectDescriptionChange}
             ></input>
-          </td>
-        </tr>
 
-        <tr>
-          <td><label className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
-              htmlFor="startAt">Start At:</label></td>
-          <td>
-            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <div>
+          <label className='block mb-2 text-sm font-bold text-gray-700' 
+              htmlFor="startAt">Start At</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
               type="date"
               id="startAt"
               value={startAt}
               onChange={handleStartAtChange}
             />
-          </td>
-        </tr>
+          </div>
 
-        <tr>
-          <td></td>
-          <td>
-            <input className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <div>
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Time</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
               type="time"
               id="time"
               value={time}
               onChange={handleTimeChange}
             />
-          </td>
-        </tr>
+          </div>
 
-        <tr>
-          <td>
-          </td>
-          <td>
-          <select className='block peer rounded-[5px] w-[25rem] mt-5 border-[#C93B32] focus:outline-none focus:border-[#C93B32]  focus:ring-1 focus:ring-[#C93B32]" : "block peer rounded-[5px] mt-5 border-[#AEBBCD] w-[25rem] focus:outline-none focus:ring-1' 
+          <div>
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Timezone</label>
+            <select className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500' 
               value={selectedTimezones} onChange={handleTimezoneChange} multiple={false}>
-            {timezones.map((timezone: { name: string; offset: any; }, index: React.Key) => (
-              <option key={index} value={timezone.name+","+timezone.offset}  >
-                {`${timezone.name} (GMT${timezone.offset})`}
-              </option>
-            ))}
-          </select>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+              {timezones.map((timezone: { name: string; offset: any; }, index: React.Key) => (
+                <option key={index} value={timezone.name+","+timezone.offset}  >
+                  {`${timezone.name} (GMT${timezone.offset})`}
+                </option>
+              ))}
+            </select>
+          </div>
+      
+      <div>
+        <label className="feedback">
+          {projectFeedback}</label>
+      </div>
+      
       <button className='my-button rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5' 
-      type="submit" onClick={handleSubmit} disabled={isCreatedProject}>Create Project</button>
+      type="submit" onClick={handleCreateProject} disabled={isCreatedProject}>Create Project</button>
     
-  <form onSubmit={handleSubmit}>
+    {productId > 0 && (
+      <button
+          className={`p-l-10 rounded-full bg-[#3D5FD9] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#2347C5] mb-5`}
+          onClick={(event) => handleUpdateProjectButton(event)}
+        >Save
+      </button>
+    )}
+  <form onSubmit={handleCreateProject}>
     {isCreatedProject && (
     <div>
       <span className="login100-form-title p-b-49 p-t-50">

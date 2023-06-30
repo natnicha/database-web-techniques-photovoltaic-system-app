@@ -266,6 +266,10 @@ tr:hover {
 .noHover{
   pointer-events: none;
 }
+
+.noHover-color{
+  background-color: none;
+}
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/
 .limiter {

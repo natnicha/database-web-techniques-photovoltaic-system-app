@@ -29,6 +29,11 @@ export default function ManageProfile() {
         if (response.ok) {
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
         if (data.data != null) {
           setFirstName(data.data.first_name)
@@ -67,6 +72,11 @@ export default function ManageProfile() {
         if (response.ok) {
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
         setFirstName(data.data.first_name)
         setLastName(data.data.last_name)
@@ -89,11 +99,14 @@ export default function ManageProfile() {
     })
     .then((response) => {
       if (response.ok) {
-          return response.json()
+        navigate("/")
+        return
       }
-    }).then((data) => {
-      navigate("/")
-      return
+      if (response.status == 401) {
+        Cookies.remove("jwt")
+        navigate("/")
+        return
+      }
     }).catch((error) => {
       console.log('error: ' + error);
     });
@@ -104,32 +117,39 @@ export default function ManageProfile() {
       <div className="relative px-6 pt-10 pb-8 bg-white shadow-xl ring-1 ring-gray-900/5 sm:max-w-lg sm:rounded-lg sm:px-10">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-300/50">
-            <div className="py-8 text-base leading-7 space-y-6 text-blue-600">
+            <div className="py-8 text-base leading-7 space-y-6">
               <h1 className="text-2xl font-bold">Personal Profile</h1>
               <form className="w-full max-w-lg">
                 <div className="mb-6">
                   <label htmlFor="firstname" className="block mb-2 text-sm font-bold text-gray-700">First Name</label>
-                  <input type="text" id="firstname" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500" />
+                  <input className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="text" id="firstname" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
 
                 <div className="mb-6">
                   <label htmlFor="lastname" className="block mb-2 text-sm font-bold text-gray-700">Last Name</label>
-                  <input type="text" id="lastname" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500" />
+                  <input className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="text" id="lastname" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
 
                 <div className="mb-6">
                   <label htmlFor="email" className="block mb-2 text-sm font-bold text-gray-700">Email</label>
-                  <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500" />
+                  <input className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
 
                 <div className="mb-6">
                   <label htmlFor="password" className="block mb-2 text-sm font-bold text-gray-700">Password</label>
-                  <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"></input>
+                  <input className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="password" placeholder='password'
+                  id="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 </div>
 
                 <div className="mb-6">
                   <label htmlFor="confirmPassword" className="block mb-2 text-sm font-bold text-gray-700">Confirm Password</label>
-                  <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"></input>
+                  <input className="w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="password" placeholder='confirm password' 
+                  id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
                 </div>
 
                 <div className="feedback">

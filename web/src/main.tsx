@@ -15,6 +15,7 @@ import SignIn from './components/Forms/SignIn';
 import SignUp from './components/Forms/SignUp';
 import Registered from './components/Registered';
 import EditProject from './components/Forms/EditProject';
+import EditProjectDetail from './components/Forms/EditProjectDetail';
 import Profile from './components/Forms/Profile';
 import ProjectList from './components/Forms/ProjectList';
 import NewProject from './components/Forms/NewProject';
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
   {
     path: "/editproject",
     element: <EditProject/>,
+    errorElement: <RouterError />,
+  },
+  {
+    path: "/editprojectdetail",
+    element: <EditProjectDetail/>,
     errorElement: <RouterError />,
   },
   {

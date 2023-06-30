@@ -41,8 +41,15 @@ const editProduct = () => {
         if (response.ok) {
             return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       }).then((data) => {
-        setSolarPanels(data.data)
+        if (data.data ){
+          setSolarPanels(data.data)
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -96,6 +103,11 @@ const editProduct = () => {
           handleBackLink()
           return response.json()
         }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
+        }
       })
       .catch((error) => {
         console.log('error: ' + error);
@@ -112,6 +124,11 @@ const editProduct = () => {
         if (response.ok) {
           handleBackLink()
           return response.json()
+        }
+        if (response.status == 401) {
+          Cookies.remove("jwt")
+          navigate("/")
+          return
         }
       }) 
       .catch((error) => {
@@ -132,8 +149,8 @@ const editProduct = () => {
             Update Product
           </span>
           <div>
-          <label>Latitude:</label>
-          <input
+          <label className='block mb-2 text-sm font-bold text-gray-700'>Latitude</label>
+          <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
             type="number"
             value={latitude}
             onChange={handleLatitudeChange}
@@ -142,8 +159,8 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Longitude:</label>
-            <input
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Longitude</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
               type="number"
               value={longitude}
               onChange={handleLongitudeChange}
@@ -151,8 +168,9 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Solar Panel:</label>
-            <select value={solarPanelId} onChange={(event) => handleSolarPanelChange(event)}>
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Solar Panel</label>
+            <select  className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
+            value={solarPanelId} onChange={(event) => handleSolarPanelChange(event)}>
               {solarPanels.map((solarPanel: { id:number, name: string; efficiency:number }, index: React.Key) => (
                 <option key={index} value={solarPanel.id}  >
                   {solarPanel.name+" ("+solarPanel.efficiency+"%)"}
@@ -162,8 +180,8 @@ const editProduct = () => {
           </div>
 
           <div>
-            <label>Area:</label>
-            <input
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Area</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
               type="number"
               value={area}
               onChange={handleAreaChange}
@@ -171,8 +189,8 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Orientation:</label>
-            <input
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Orientation</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
               type="number"
               value={orientation}
               onChange={handleOrientationChange}
@@ -180,8 +198,8 @@ const editProduct = () => {
           </div>
           
           <div>
-            <label>Inclination:</label>
-            <input
+            <label className='block mb-2 text-sm font-bold text-gray-700'>Inclination</label>
+            <input className='w-full p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500'
               type="number"
               value={inclination}
               onChange={handleInclinationChange}
