@@ -477,11 +477,12 @@ export default function EditProject() {
             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" ></script>
             
+          {mapSetting.south != 0 && (
             <MapContainer
               className="markercluster-map"
               bounds={latLngBounds([mapSetting.south, mapSetting.west],[mapSetting.north, mapSetting.east])}
               zoom={3}
-              maxZoom={6}
+              maxZoom={18}
               >
               <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -504,8 +505,8 @@ export default function EditProject() {
                 </ul>
               )}
             </MapContainer>
+          )}
           </div>
-        
         <div>
           <button className="my-button rounded-full bg-[#c80000] text-[#F5F7FF] w-[25rem] p-3 mt-5 hover:bg-[#af0000] mb-5" 
           onClick={(event) => handleDelete(event)}
