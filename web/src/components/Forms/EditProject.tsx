@@ -414,7 +414,7 @@ export default function EditProject() {
           
           <tr className="noHover">
             <td><label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="generatedEnergy">
-              Generated Energy</label></td>
+              Generated Energy (kWh)</label></td>
             <td><label className="block mb-2 p-l-100 text-sm text-gray-700">
               {generatedEnergy}</label></td>
           </tr>
