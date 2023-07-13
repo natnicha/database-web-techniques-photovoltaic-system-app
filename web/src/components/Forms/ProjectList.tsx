@@ -12,7 +12,7 @@ function objToQueryString(obj: { [x: string]: string | number | boolean; }) {
       keyValuePairs.push(encodeURIComponent(key) + ':' + encodeURIComponent(obj[key]));
     }
   }
-  return "&filter="+ keyValuePairs.join('&');
+  return "&filter="+ keyValuePairs.join(encodeURIComponent('&'));
 }
 
 const ProjectList = () => {
