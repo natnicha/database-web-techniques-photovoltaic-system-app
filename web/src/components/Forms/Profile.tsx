@@ -98,15 +98,9 @@ export default function ManageProfile() {
     headers: {'Authorization': "bearer "+jwt},
     })
     .then((response) => {
-      if (response.ok) {
-        navigate("/")
-        return
-      }
-      if (response.status == 401) {
         Cookies.remove("jwt")
         navigate("/")
         return
-      }
     }).catch((error) => {
       console.log('error: ' + error);
     });
